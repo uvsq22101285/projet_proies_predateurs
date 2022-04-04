@@ -1,10 +1,11 @@
 #LIBRAIRIES
 
 from tkinter import *
+from tkinter import messagebox as box
 from PIL import ImageTk, Image
 import random as r
 
-reset= 0
+init = 0
 case = 30 #Nombre de cases
 taille = 600/case #Taille des cases
 Npro = 10 #Nombre de proies
@@ -40,13 +41,14 @@ def spawnPro(): #APPARITION DES PROIES
             n+=1
     affGrid()
 
-#def BornPro():
-    #global reset, Npro
-    #if reset > 0:
-        #Npro = Fpro
-        #spawnPro()
-        #reset = 0
-        #affGrid()
+def BornPro():
+    global reset, Npro
+    Npro = Fpro
+    spawnPro()
+    reset = 0
+    affGrid()
+    
+
 
 
 
@@ -58,7 +60,7 @@ def affGrid(): #AFFICHAGE DE LA CARTE
             canvas.grid()
 
 def movePro():
-    global grid, reset
+    global grid, reset, init
     newGrid = [[0 for x in range(case)]for y in range(case)]
     for x in range(case):
         for y in range(case):
@@ -77,11 +79,12 @@ def movePro():
                     grid[x][y] = 0
                     newGrid[x][y+1] = 1
     grid = newGrid
-    spawnPro()
-    reset+=1
-    #if reset >0 :
-        #BornPro()
-    
+    if init == 0:
+        spawnPro()
+    if init!= 0:
+        BornPro()
+    init+=1
+   
     affGrid()
 
 
