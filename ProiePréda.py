@@ -14,12 +14,16 @@ Fpro = 3 #Fréquences d'apparition des proies
 #img = Image.open('16x16_knight_sprite.png')
 #img  = ImageTk.PhotoImage(img)
 
+
+
 #CREATION DE LA GRILLE
 grid = [[0 for x in range(case)]for y in range(case)]
 
 #PARTIE TKINTER
 root= Tk()
 root.title('Chasse')
+image = Image.open("poule.png") 
+photo = ImageTk.PhotoImage(image)
 canvas = Canvas(root,height=600,width=600)
 canvas.grid()
 #backgroundLabel = Label(root,image=img)
