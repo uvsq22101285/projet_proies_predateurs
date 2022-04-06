@@ -11,7 +11,7 @@ taille = 600/case #Taille des cases
 Npro = 10 #Nombre de proies
 Fpro = 3 #Fréquences d'apparition des proies
 
-#img =Image.open('16x16_knight_sprite.png')
+#img = Image.open('16x16_knight_sprite.png')
 #img  = ImageTk.PhotoImage(img)
 
 #CREATION DE LA GRILLE
@@ -41,16 +41,14 @@ def spawnPro(): #APPARITION DES PROIES
             n+=1
     affGrid()
 
-def BornPro():
-    global reset, Npro
+def BornPro(): #Naissance des proies
+    global Npro
     Npro = Fpro
     spawnPro()
-    reset = 0
     affGrid()
-    
 
-
-
+def ReproPro(): #Reproduction des proies
+    pass
 
 def affGrid(): #AFFICHAGE DE LA CARTE
     global grid
@@ -60,7 +58,7 @@ def affGrid(): #AFFICHAGE DE LA CARTE
             canvas.grid()
 
 def movePro():
-    global grid, reset, init
+    global grid, init
     newGrid = [[0 for x in range(case)]for y in range(case)]
     for x in range(case):
         for y in range(case):
