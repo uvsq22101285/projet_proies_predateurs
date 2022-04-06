@@ -1,10 +1,8 @@
-#Contributors : GNICHI Rim - BACLE Arnaud - MOBRÉ Eliott - SUZANNE Jean-Alexandre
+#Contributors :  MOBRÉ Eliott - SUZANNE Jean-Alexandre
 
 
 #########################################
 # groupe MPCI 04
-# Rim GNICHI
-# Arnaud BACLE
 # Eliott MOBRE
 # Jean-Alexandre SUZANNE
 # https://github.com/uvsq22101285/projet_tas_de_sable
@@ -27,10 +25,6 @@ taille = 600/case #Taille des cases
 Npro = 10 #Nombre de proies
 Fpro = 3 #Fréquences d'apparition des proies
 
-#img = Image.open('16x16_knight_sprite.png')
-#img  = ImageTk.PhotoImage(img)
-
-
 
 #CREATION DE LA GRILLE
 grid = [[0 for x in range(case)]for y in range(case)]
@@ -38,8 +32,8 @@ grid = [[0 for x in range(case)]for y in range(case)]
 #PARTIE TKINTER
 root= Tk()
 root.title('Chasse')
-image = Image.open("poule.png") 
-photo = ImageTk.PhotoImage(image)
+img = Image.open('poule.png')
+img  = ImageTk.PhotoImage(img)
 canvas = Canvas(root,height=600,width=600)
 canvas.grid()
 #backgroundLabel = Label(root,image=img)
@@ -72,10 +66,13 @@ def ReproPro(): #Reproduction des proies
 
 def affGrid(): #AFFICHAGE DE LA CARTE
     global grid
+    img = PhotoImage(file ="sol.png")
     for x in range(case):
         for y in range(case):
-            canvas.create_rectangle(taille*x,taille*y,taille+taille*x,taille+taille*y,fill=findColor(x,y,grid)[0],outline=findColor(x,y,grid)[1])
+            canvas.create_image(taille*x,taille*y,taille+taille*x,taille+taille*y,image=img)
             canvas.grid()
+
+
 
 def movePro():
     global grid, init
