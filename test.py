@@ -11,17 +11,17 @@ root = Tk()
 root.title('PythonGuides')
 root.geometry('500x500')
 
-canvas = Canvas(root, width = 640, height = 640,bg='blue')
-img = PhotoImage(file ="carré_sol.png")
+canvas = Canvas(root, width = 640, height = 640,bg='green')
+sol = PhotoImage(file ="carré_sol.png")
+rabbit = PhotoImage(file ="rabbit.png")
+fox = PhotoImage(file ="fox.png")
 for x in range(20):
     for y in range(20):
         canvas.create_image(x*32,y*32,image=img,anchor=NW)
 
+canvas.create_image(32,0, image=img3, anchor=NW)
+canvas.create_image(0,0,image=img2, anchor=NW)
 
-img2 = PhotoImage(file ="rabbit.png")
-for x in range(20):
-    for y in range(20):
-        canvas.create_image(x*32,y*32,image=img2,anchor=NW)
-        canvas.grid()
+canvas.grid()
 
 root.mainloop()
