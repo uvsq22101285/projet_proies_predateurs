@@ -25,6 +25,10 @@ taille = 600/case #Taille des cases
 Npro = 10 #Nombre de proies
 Fpro = 3 #Fréquences d'apparition des proies
 
+#Image
+sol = PhotoImage(file ="carré_sol.png")
+rabbit = PhotoImage(file ="rabbit.png")
+fox = PhotoImage(file ="fox.png")
 
 #CREATION DE LA GRILLE
 grid = [[0 for x in range(case)]for y in range(case)]
@@ -32,8 +36,6 @@ grid = [[0 for x in range(case)]for y in range(case)]
 #PARTIE TKINTER
 root= Tk()
 root.title('Chasse')
-img = Image.open('poule.png')
-img  = ImageTk.PhotoImage(img)
 canvas = Canvas(root,height=600,width=600)
 canvas.grid()
 #backgroundLabel = Label(root,image=img)
@@ -66,10 +68,9 @@ def ReproPro(): #Reproduction des proies
 
 def affGrid(): #AFFICHAGE DE LA CARTE
     global grid
-    img = PhotoImage(file ="sol.png")
     for x in range(case):
         for y in range(case):
-            canvas.create_image(taille*x,taille*y,taille+taille*x,taille+taille*y,image=img)
+            canvas.create_image(taille*x,taille*y,sol)
             canvas.grid()
 
 
