@@ -32,7 +32,7 @@ grid = [[0 for x in range(case)]for y in range(case)]
 #PARTIE TKINTER
 root= Tk()
 root.title('Chasse')
-img = Image.open('poule.png')
+img = Image.open('rabbit.png')
 img  = ImageTk.PhotoImage(img)
 canvas = Canvas(root,height=600,width=600)
 canvas.grid()
