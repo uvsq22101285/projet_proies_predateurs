@@ -11,9 +11,9 @@ canvas = Canvas(root, width = 640, height = 640,bg='green')
 coordF=[]
 coordP=[]
 #load img
-sol = PhotoImage(file ="carré_sol.png")
-rabbit = PhotoImage(file ="rabbit.png")
-fox = PhotoImage(file ="fox.png")
+sol = PhotoImage(file ="img\\carré_sol.png")
+rabbit = PhotoImage(file ="img\\rabbit.png")
+fox = PhotoImage(file ="img\\fox.png")
 
 #Affichage case
 def affGrid(grid):
