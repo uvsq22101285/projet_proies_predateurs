@@ -8,28 +8,33 @@ root.title('PythonGuides')
 root.geometry('500x500')
 canvas = Canvas(root, width = 640, height = 640,bg='green')
 
-coordF=[]
-coordP=[]
 #load img
 sol = PhotoImage(file ="carré_sol.png")
 rabbit = PhotoImage(file ="rabbit.png")
 fox = PhotoImage(file ="fox.png")
 
+global grid
+grid =[[0 for i in range(10)]for j in range(10)]
+
+coordP=[0]
+coordF=[0]
+
+
 #Affichage case
-def affGrid(grid):
+def affGrid():
     for x in range(10):
         for y in range(10):
             canvas.create_image(x*64,y*64,image=sol,anchor=NW)
             if grid[x][y] ==1:
                 canvas.create_image(x*64,y*64,image=rabbit, anchor=NW)
-                coordF.append([x,y])
+                coordP[0]=([x,y])
             if grid[x][y] ==2:
                 canvas.create_image(x*64,y*64,image=fox, anchor=NW)
-                coordP.append([x,y])
+                coordF[0]=([x,y])
     canvas.grid()
 
 #fait apparaître animal X fois
-def SpawnA(grid,nbr,animal): 
+def SpawnA(nbr,animal):
     for X in range(nbr):
         r1 = [randint(0,9),randint(0,9)] #random case vide
         while grid[r1[0]][r1[1]] !=0:
@@ -37,25 +42,30 @@ def SpawnA(grid,nbr,animal):
         grid[r1[0]][r1[1]] = animal
 
 def Start():
+    global grid
     grid =[[0 for i in range(10)]for j in range(10)] #Besoin de supprimer les anciens avant
-    SpawnA(grid,1,1)
-    SpawnA(grid,1,2)
-    affGrid(grid)
-    find()
-Start
+    SpawnA(1,1)
+    SpawnA(1,2)
+    affGrid()
+Start()
 
 #déplacement Fox
 def find():
-    dx = coordF[0][0]-coordP[0][0]
-    dy = coordF[0][1]-coordP[0][1]
+    print(coordF,coordP)
+    dx = coordP[0][0]-coordF[0][0]
+    dy = coordP[0][1]-coordF[0][1]
     print(dx,dy)
     dist=[dx,dy]
     for i in range(2):
         if dist[i]!=0:
-            dist[i]=dist[i]/abs(dist[i])
-
+            dist[i]=dist[i]//abs(dist[i])
     print(dist)
+    grid[coordF[0][0]][coordF[0][1]] = 0
+    grid[coordF[0][0]+dist[0]][coordF[0][1]+dist[1]] = 2
+    affGrid()
 
 BtnRandom = Button(root,text='Random', command=Start)
 BtnRandom.grid()
+BtnMove = Button(root,text='Move >', command=find)
+BtnMove.grid()
 root.mainloop()
