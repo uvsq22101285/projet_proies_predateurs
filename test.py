@@ -15,42 +15,47 @@ fox = PhotoImage(file ="fox.png")
 
 global grid
 grid =[[0 for i in range(10)]for j in range(10)]
-
-coordP=[0]
-coordF=[0]
+global coordP
+coordP=[]
+global coordF
+coordF=[]
 
 
 #Affichage case
 def affGrid():
+    global coordP
+    global coordF
     for x in range(10):
         for y in range(10):
             canvas.create_image(x*64,y*64,image=sol,anchor=NW)
             if grid[x][y] ==1:
                 canvas.create_image(x*64,y*64,image=rabbit, anchor=NW)
-                coordP[0]=([x,y])
+                coordP.append([x,y])
             if grid[x][y] ==2:
                 canvas.create_image(x*64,y*64,image=fox, anchor=NW)
-                coordF[0]=([x,y])
+                coordF.append([x,y])
     canvas.grid()
 
 #fait apparaître animal X fois
 def SpawnA(nbr,animal):
     for X in range(nbr):
         r1 = [randint(0,9),randint(0,9)] #random case vide
-        while grid[r1[0]][r1[1]] !=0:
+        while grid[r1[0]][r1[1]] !=2:
             r1 = [randint(0,9),randint(0,9)]
         grid[r1[0]][r1[1]] = animal
 
 def Start():
     global grid
     grid =[[0 for i in range(10)]for j in range(10)] #Besoin de supprimer les anciens avant
-    SpawnA(1,1)
+    SpawnA(3,1)
     SpawnA(1,2)
     affGrid()
 Start()
 
 #déplacement Fox
 def find():
+    global coordP
+    global coordF
     print(coordF,coordP)
     dx = coordP[0][0]-coordF[0][0]
     dy = coordP[0][1]-coordF[0][1]
@@ -60,8 +65,11 @@ def find():
         if dist[i]!=0:
             dist[i]=dist[i]//abs(dist[i])
     print(dist)
-    grid[coordF[0][0]][coordF[0][1]] = 0
-    grid[coordF[0][0]+dist[0]][coordF[0][1]+dist[1]] = 2
+    if grid[coordF[0][0]+dist[0]][coordF[0][1]+dist[1]] == 0:
+        grid[coordF[0][0]][coordF[0][1]] = 0
+        grid[coordF[0][0]+dist[0]][coordF[0][1]+dist[1]] = 2
+    coordP=[]
+    coordF=[]
     affGrid()
 
 BtnRandom = Button(root,text='Random', command=Start)
