@@ -66,7 +66,7 @@ def ReproPro(): #Reproduction des proies
 
 def affGrid(): #AFFICHAGE DE LA CARTE
     global grid
-    img = PhotoImage(file ="sol.png")
+    img = PhotoImage(file ="carré_sol.png")
     for x in range(case):
         for y in range(case):
             canvas.create_image(taille*x,taille*y,taille+taille*x,taille+taille*y,image=img)
