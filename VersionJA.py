@@ -18,12 +18,19 @@ taille_case= 600/case
 Apro = 10
 xpro = 0
 ypro = 0
+###########
+#Predateur
+
+Apre = 5
+Epre = 5 
 
 #Position objet
 coordR = []
 coordF = []
 
-
+##test
+compteur = 0
+newGrid = []
 
 #Grille 
 grid = [[[] for x in range(case)]for y in range(case)]
@@ -43,18 +50,24 @@ def SpawnPro(x,y,grid):
     if grid[x][y] == []:
         grid[x][y] = ['R',Apro]
 
+def SpawnPre(x,y,grid):
+    if grid[x][y] == []:
+        grid[x][y] =['F',Apre,Epre]
+
+
 #placement des 10 proies
 def Start(widget):
     affGrid()
-    for _ in range(1):
+    for _ in range(5):
         Random()
         if grid[xpro][ypro] != []:
             while grid[xpro][ypro]!= []:
                 Random()
         SpawnPro(xpro,ypro,grid)
     widget.grid_forget()
-    BtnNext.grid()
+    BtnNext.grid(column=0, row=1)
     affGrid()
+
 
 ###################
 
@@ -75,6 +88,7 @@ def Naissance():
     for _ in range(Fpro):
         Random()
         SpawnPro(xpro,ypro,grid)
+    affGrid()
 
 def Check(type):
     #global coordR
@@ -90,91 +104,47 @@ def Check(type):
 
 #####
 # A améliorer pour Move
-def Autour(x,y):
-    liste= []    
-    liste_x = [x-1,x+1,x]
-    liste_y = [y-1,y+1,y]
-    x = liste_x[rd.randint(0,2)]
-    y = liste_y[rd.randint(0,2)]
-    liste.append(x)
-    liste.append(y)
-    return liste
+def Autour(x,y, grid):
+    global xpro, ypro
+    liste_x = [x, x+1,x-1]
+    liste_y = [y, y+1, y-1]
+    xpro,ypro = x,y
+    print(f'Coordonnées de base xpro={xpro} et y = {ypro}')
+    while grid[xpro][ypro] != []:
+        if xpro == x and ypro == y:
+            while xpro == x and ypro == y:
+                xpro = liste_x[rd.randint(0,2)]
+                ypro = liste_y[rd.randint(0,2)]
+                print(f'relance x ={xpro},y= {ypro}')
+        else:
+            xpro = liste_x[rd.randint(0,2)]
+            ypro = liste_y[rd.randint(0,2)]
+    print(f'Coordonnées de fin xpro={xpro} et y = {ypro}')
 #####
 
+def newgrid():
+    global newGrid
+    newGrid = [[[] for x in range(case)]for y in range(case)]
+    bordureFill(grid,case,'#')
 #####
 
-def AutourV2(a,b):
-    global xpro, ypro
-    liste_a = [a-1,a+1,a]
-    liste_b = [b-1,b+1,b]
-    xpro = liste_a[rd.randint(0,2)]
-    ypro = liste_b[rd.randint(0,2)]
-
-
-'''''''''''''''
 def Move():
-    global grid
+    global xpro, ypro, grid
     temp = []
-    coordtemp = []
-    for x in range(case):
-        for y in range(case):
-            if len(grid[x][y]) == 2:
-                liste_x = [x-1,x+1,x]
-                liste_y = [y-1,y+1,y]
-                temp =grid[x][y].copy()
-                grid[x][y] = []
-                coordtemp.append(x)
-                coordtemp.append(y)
-                print('####')
-                print(x,y)
-                x = liste_x[rd.randint(0,len(liste_x)-1)]
-                y = liste_y[rd.randint(0,len(liste_y)-1)]
-                print(x,y)
-                print(grid[x][y])
-                if grid[x][y] != []:
-                    while grid[x][y] != []:
-                        x = coordtemp[0]
-                        y = coordtemp[1]
-                        x = liste_x[rd.randint(0,len(liste_x)-1)]
-                        y = liste_y[rd.randint(0,len(liste_y)-1)]
-                        while x == coordtemp[0] and y == coordtemp[1]:
-                            x = coordtemp[0]
-                            y = coordtemp[1]
-                            x = liste_x[rd.randint(0,len(liste_x)-1)]
-                            y = liste_y[rd.randint(0,len(liste_y)-1)]
-                print(x,y)
-                grid[x][y] = temp.copy()
-                temp=[]
-                coordtemp = []
-'''''''''
-
-def Move():
-    global xpro, ypro
-    xpro = 0
-    ypro = 0
-    temp = []
+    newgrid()
     for x in range(case):
         for y in range(case):
             if len(grid[x][y]) == 2 :
+                xpro = 0
+                ypro = 0
                 temp = grid[x][y].copy()
+                Autour(x,y,grid)
                 grid[x][y] = []
-                print('###')
-                print(xpro,ypro)
-                AutourV2(x,y)
-                print(xpro,ypro)
-                print(grid[xpro][ypro])
-                if grid[xpro][ypro]!= []:
-                    while grid[xpro][ypro]!= []:
-                        AutourV2(x,y)
-                print(xpro,ypro)
-                print('###')
-                grid[xpro][ypro] = temp.copy()
-            temp = []
-
-
+                newGrid[xpro][ypro] = temp.copy()
+                temp = []
+    grid = newGrid
+    affGrid()
                     
-
-
 
 
 def Restart():
@@ -182,14 +152,19 @@ def Restart():
     grid = [[[] for x in range(case)]for y in range(case)]
     affGrid()
 
+def Automatique():
+    for _ in range(10): #à modifer 
+        root.after(3000,Next())
 
 
 def Next():
+    global compteur
     Check(1)
     #Check(2)
     Move()
     #Naissance()
-    affGrid()
+    compteur+=1
+    print(f'Nombres {compteur} de tours')
    
 
 def affGrid():
@@ -212,13 +187,13 @@ def affGrid():
 root = Tk()
 root.title('Chasse')
 canvas = Canvas(root, width = 760, height = 760,bg='green')
-canvas.grid()
+canvas.grid(columnspan=1)
 BtnStart = Button(root,text='Start', command=lambda: Start(BtnStart))
-BtnStart.grid()
+BtnStart.grid(column=0, row=1)
 BtnRestart = Button(root, text='Restart', command=Restart)
 BtnRestart.grid(row=0, column=1)
 BtnNext = Button(root, text='Next', command=Next)
-
+BtnAuto = Button(root, text='Auto', command=Automatique).grid(column=1,row=1)
 
 #Images Projet
 sol = PhotoImage(file ="carré_sol.png")
