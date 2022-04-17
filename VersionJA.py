@@ -10,12 +10,12 @@ from PIL import ImageTk, Image
 #nombres de proies initiales
 Npro = 10
 #fréquences d'apparition des lapins à chaque tour
-Fpro = 1
+Fpro = 0
 
 #Nombre de case fois lui même 
 case = 12
 taille_case= 600/case
-Apro = 5
+Apro = 10
 xpro = 0
 ypro = 0
 
@@ -87,14 +87,31 @@ def Check(type):
                     else:
                         grid[x][y] = []
 
+
+#####
+# A améliorer pour Move
 def Autour(x,y):
+    liste= []    
     liste_x = [x-1,x+1,x]
     liste_y = [y-1,y+1,y]
-    x = liste_x[rd.randint(0,len(liste_x)-1)]
-    y = liste_y[rd.randint(0,len(liste_y)-1)]
-    return x,y
+    x = liste_x[rd.randint(0,2)]
+    y = liste_y[rd.randint(0,2)]
+    liste.append(x)
+    liste.append(y)
+    return liste
+#####
+
+#####
+
+def AutourV2(a,b):
+    global xpro, ypro
+    liste_a = [a-1,a+1,a]
+    liste_b = [b-1,b+1,b]
+    xpro = liste_a[rd.randint(0,2)]
+    ypro = liste_b[rd.randint(0,2)]
 
 
+'''''''''''''''
 def Move():
     global grid
     temp = []
@@ -108,6 +125,8 @@ def Move():
                 grid[x][y] = []
                 coordtemp.append(x)
                 coordtemp.append(y)
+                print('####')
+                print(x,y)
                 x = liste_x[rd.randint(0,len(liste_x)-1)]
                 y = liste_y[rd.randint(0,len(liste_y)-1)]
                 print(x,y)
@@ -118,18 +137,46 @@ def Move():
                         y = coordtemp[1]
                         x = liste_x[rd.randint(0,len(liste_x)-1)]
                         y = liste_y[rd.randint(0,len(liste_y)-1)]
-                        if x == coordtemp[0] and y == coordtemp[1]:
+                        while x == coordtemp[0] and y == coordtemp[1]:
                             x = coordtemp[0]
                             y = coordtemp[1]
                             x = liste_x[rd.randint(0,len(liste_x)-1)]
                             y = liste_y[rd.randint(0,len(liste_y)-1)]
-
+                print(x,y)
                 grid[x][y] = temp.copy()
                 temp=[]
                 coordtemp = []
-    affGrid()
+'''''''''
 
-                
+def Move():
+    global xpro, ypro
+    xpro = 0
+    ypro = 0
+    temp = []
+    for x in range(case):
+        for y in range(case):
+            if len(grid[x][y]) == 2 :
+                temp = grid[x][y].copy()
+                grid[x][y] = []
+                print('###')
+                print(xpro,ypro)
+                AutourV2(x,y)
+                print(xpro,ypro)
+                print(grid[xpro][ypro])
+                if grid[xpro][ypro]!= []:
+                    while grid[xpro][ypro]!= []:
+                        AutourV2(x,y)
+                print(xpro,ypro)
+                print('###')
+                grid[xpro][ypro] = temp.copy()
+            temp = []
+
+
+                    
+
+
+
+
 def Restart():
     global grid
     grid = [[[] for x in range(case)]for y in range(case)]
@@ -138,12 +185,13 @@ def Restart():
 
 
 def Next():
+    compteur = 0
     Check(1)
     #Check(2)
     Move()
-    Naissance()
+    #Naissance()
     affGrid()
-    
+    compteur+=1    
 
 def affGrid():
     bordureFill(grid,case,'#')
