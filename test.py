@@ -52,6 +52,33 @@ def Check(condition):
                 else:
                     grid[x][y] = []
 
+def flare():
+    for x in range(nbrCase):
+        for y in range(nbrCase):
+            if len(grid[x][y]) == 3:
+                listP=[]
+                for j in range(len(coordP)):
+                    dx = coordP[j][0]-x
+                    dy = coordP[j][1]-y
+                    listP.append(max(abs(dx),abs(dy)))
+                minVal = listP[0]
+                indx = 0
+    #return index min
+                for k in range(len(listP)):
+                    if listP[k] < minVal:
+                        minVal = listP[k]
+                        indx = k 
+                print('cible',coordP[k])        
+    #coord min
+                dx =coordP[indx][0]-x
+                dy =coordP[indx][1]-y
+                dist=[dx,dy]
+                print('dist',dist)
+                for n in range(2):
+                    if dist[n]!=0:
+                        dist[n]= dist[n]//abs(dist[n]) #deplace de 1
+                return(x+dist[0],y+dist[1])
+
 def Start():
     global grid
     grid =[[0 for i in range(10)]for j in range(10)] #Besoin de supprimer les anciens avant
