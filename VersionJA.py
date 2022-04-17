@@ -7,22 +7,32 @@ from PIL import ImageTk, Image
 
 
 #Variables
-#nombres de proies initiales
-Npro = 10
-#fréquences d'apparition des lapins à chaque tour
-Fpro = 0
+
+
+
+
 
 #Nombre de case fois lui même 
 case = 12
 taille_case= 600/case
+
+
+###########
+#Proies
+#nombres de proies initiales
+Npro = 10
+#fréquences d'apparition des lapins à chaque tour
+Fpro = 2
 Apro = 10
 xpro = 0
 ypro = 0
 ###########
 #Predateur
-
+Npre = 5
 Apre = 5
 Epre = 5 
+xpre = 0
+ypre = 0
 
 #Position objet
 coordR = []
@@ -50,20 +60,28 @@ def SpawnPro(x,y,grid):
     if grid[x][y] == []:
         grid[x][y] = ['R',Apro]
 
+#Spawn des prédateurs
 def SpawnPre(x,y,grid):
     if grid[x][y] == []:
         grid[x][y] =['F',Apre,Epre]
 
 
-#placement des 10 proies
+#commencement de la partie
 def Start(widget):
     affGrid()
-    for _ in range(5):
+    for _ in range(Npro):
         Random()
         if grid[xpro][ypro] != []:
             while grid[xpro][ypro]!= []:
                 Random()
         SpawnPro(xpro,ypro,grid)
+    for _ in range(5):
+        Random()
+        if grid[xpro][ypro] != []:
+            while grid[xpro][ypro]!= []:
+                Random()
+        SpawnPre(xpro,ypro,grid)
+    
     widget.grid_forget()
     BtnNext.grid(column=0, row=1)
     affGrid()
@@ -71,7 +89,7 @@ def Start(widget):
 
 ###################
 
-####Test####
+####ajout bordure plateau###
 def bordureFill(g,l,b):
     for i in range(l):
         for j in range(l):
@@ -90,37 +108,80 @@ def Naissance():
         SpawnPro(xpro,ypro,grid)
     affGrid()
 
-def Check(type):
-    #global coordR
+def NaissanceV2():
+    global xpro, ypro, grid
+    for x in range(case):
+        for y in range(case):
+            if len(grid[x][y]) == 2:
+                Detect(x,y,grid)
+                if xpro == x and ypro == y:
+                    continue
+                else:
+                    pass
+                    
+                    
+def SpawnProNaissance(x,y,xpro,ypro):
+    liste_x = [x, x+1,x-1]
+    liste_xpro = [xpro,xpro+1,xpro-1]
+    liste_y = [y, y+1, y-1]
+    liste_ypro = [ypro,ypro+1,ypro-1]
+    liste = [liste_x] + [liste_y] + [liste_xpro] + [liste_ypro]
+    if liste[rd.randint(0,3)]:
+        pass
+
+
+
+def Detect(x,y,grid):
+    global xpro, ypro
+    compteur = 0
+    liste_x = [x, x+1,x-1]
+    liste_y = [y, y+1, y-1]
+    xpro,ypro = x,y
+    while len(grid[xpro][ypro]) != 2:
+        compteur +=1
+        xpro = liste_x[rd.randint(0,2)]
+        ypro = liste_y[rd.randint(0,2)]
+        if xpro == x and ypro == y:
+            while xpro == x and ypro == y:
+                xpro = liste_x[rd.randint(0,2)]
+                ypro = liste_y[rd.randint(0,2)]
+        elif compteur > 8:
+            xpro,ypro = x,y
+                
+
+def Check(condition):
     for x in range(case):
         for y in range(case):
             if grid[x][y] != '#':
-                if len(grid[x][y])!=0:
-                    if grid[x][y][type] > 1 :
-                        grid[x][y][type] -= 1
+                if len(grid[x][y])-1>=condition:
+                    if grid[x][y][condition] > 1 :
+                        grid[x][y][condition] -= 1
                     else:
                         grid[x][y] = []
+    #print(grid)
+
 
 
 #####
-# A améliorer pour Move
-def Autour(x,y, grid):
+#Fonctions déplacement lapin
+def CalculPro(x,y, grid):
     global xpro, ypro
     liste_x = [x, x+1,x-1]
     liste_y = [y, y+1, y-1]
     xpro,ypro = x,y
-    print(f'Coordonnées de base xpro={xpro} et y = {ypro}')
     while grid[xpro][ypro] != []:
         if xpro == x and ypro == y:
             while xpro == x and ypro == y:
                 xpro = liste_x[rd.randint(0,2)]
                 ypro = liste_y[rd.randint(0,2)]
-                print(f'relance x ={xpro},y= {ypro}')
         else:
             xpro = liste_x[rd.randint(0,2)]
             ypro = liste_y[rd.randint(0,2)]
-    print(f'Coordonnées de fin xpro={xpro} et y = {ypro}')
 #####
+#Fonction déplacement renard
+def Flair():
+    pass
+
 
 def newgrid():
     global newGrid
@@ -128,8 +189,10 @@ def newgrid():
     bordureFill(grid,case,'#')
 #####
 
+
+
 def Move():
-    global xpro, ypro, grid
+    global xpro, ypro,xpre,ypre, grid
     temp = []
     newgrid()
     for x in range(case):
@@ -138,10 +201,17 @@ def Move():
                 xpro = 0
                 ypro = 0
                 temp = grid[x][y].copy()
-                Autour(x,y,grid)
+                CalculPro(x,y,grid)
                 grid[x][y] = []
                 newGrid[xpro][ypro] = temp.copy()
                 temp = []
+            if len(grid[x][y]) == 3 :
+                temp = grid[x][y].copy()
+                Flair()
+                grid[x][y] = []
+                newGrid[xpre][ypre] = temp.copy()
+                temp = []
+
     grid = newGrid
     affGrid()
                     
@@ -158,13 +228,10 @@ def Automatique():
 
 
 def Next():
-    global compteur
     Check(1)
-    #Check(2)
+    Check(2)
     Move()
     #Naissance()
-    compteur+=1
-    print(f'Nombres {compteur} de tours')
    
 
 def affGrid():
