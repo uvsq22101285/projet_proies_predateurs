@@ -191,13 +191,12 @@ def CalculPro(x,y, grid):
     liste_y = [y, y+1, y-1]
     xpro,ypro = x,y
     while grid[xpro][ypro] != []:
+        xpro = liste_x[rd.randint(0,2)]
+        ypro = liste_y[rd.randint(0,2)]
         if xpro == x and ypro == y:
             while xpro == x and ypro == y:
                 xpro = liste_x[rd.randint(0,2)]
                 ypro = liste_y[rd.randint(0,2)]
-        else:
-            xpro = liste_x[rd.randint(0,2)]
-            ypro = liste_y[rd.randint(0,2)]
 #####
 #Fonction déplacement renard
 def Flair():
@@ -207,7 +206,7 @@ def Flair():
 def newgrid():
     global newGrid
     newGrid = [[[] for x in range(case)]for y in range(case)]
-    bordureFill(grid,case,'#')
+    bordureFill(newGrid,case,'#')
 #####
 
 
@@ -251,8 +250,8 @@ def Automatique():
 def Next():
     Check(1)
     Check(2)
-    #Move()
-    NaissanceV2()
+    Move()
+    #NaissanceV2()
     #Naissance()
    
 
