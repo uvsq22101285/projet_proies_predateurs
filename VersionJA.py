@@ -22,7 +22,7 @@ taille_case= 600/case
 #nombres de proies initiales
 Npro = 10
 #fréquences d'apparition des lapins à chaque tour
-Fpro = 2
+Fpro =1
 Apro = 10
 xpro = 0
 ypro = 0
@@ -41,6 +41,7 @@ coordF = []
 ##test
 compteur = 0
 newGrid = []
+liste_pro = []
 
 #Grille 
 grid = [[[] for x in range(case)]for y in range(case)]
@@ -110,44 +111,65 @@ def Naissance():
 
 def NaissanceV2():
     global xpro, ypro, grid
+    
     for x in range(case):
         for y in range(case):
             if len(grid[x][y]) == 2:
+                xpro,ypro = 0,0
+                print('avant detect',xpro,ypro)
                 Detect(x,y,grid)
-                if xpro == x and ypro == y:
-                    continue
-                else:
-                    pass
+                print('après detect',xpro,ypro)
+                if xpro != 0 and ypro != 0:
+                    if grid[xpro][ypro][1] != 5:
+                        SpawnProNaissance(x,y,xpro,ypro)
+    affGrid()
+    print('gui')
                     
                     
 def SpawnProNaissance(x,y,xpro,ypro):
+    global grid
     liste_x = [x, x+1,x-1]
     liste_xpro = [xpro,xpro+1,xpro-1]
     liste_y = [y, y+1, y-1]
     liste_ypro = [ypro,ypro+1,ypro-1]
     liste = [liste_x] + [liste_y] + [liste_xpro] + [liste_ypro]
-    if liste[rd.randint(0,3)]:
-        pass
+    liste_final = []
 
+    if liste[rd.randint(0,3)] == liste[0] or liste[rd.randint(0,3)] == liste[2]:
+        liste_final.append(liste[0][rd.randint(0,2)])
+        liste_final.append(liste[2][rd.randint(0,2)])
+    else:
+        liste_final.append(liste[1][rd.randint(0,2)])
+        liste_final.append(liste[3][rd.randint(0,2)])
 
+    if grid[liste_final[0]][liste_final[1]] != []:
+        while grid[liste_final[0]][liste_final[1]] != []:
+            liste_final = []
+            if liste[rd.randint(0,3)] == liste[0] or liste[rd.randint(0,3)] == liste[2]:
+                liste_final.append(liste[0][rd.randint(0,2)])
+                liste_final.append(liste[2][rd.randint(0,2)])
+            else:
+                liste_final.append(liste[1][rd.randint(0,2)])
+                liste_final.append(liste[3][rd.randint(0,2)])
+
+    SpawnPro(liste_final[0],liste_final[1],grid)      
 
 def Detect(x,y,grid):
-    global xpro, ypro
+    global xpro, ypro,liste
     compteur = 0
-    liste_x = [x, x+1,x-1]
-    liste_y = [y, y+1, y-1]
-    xpro,ypro = x,y
-    while len(grid[xpro][ypro]) != 2:
-        compteur +=1
-        xpro = liste_x[rd.randint(0,2)]
-        ypro = liste_y[rd.randint(0,2)]
-        if xpro == x and ypro == y:
-            while xpro == x and ypro == y:
-                xpro = liste_x[rd.randint(0,2)]
-                ypro = liste_y[rd.randint(0,2)]
-        elif compteur > 8:
-            xpro,ypro = x,y
-                
+    liste_pro.append([x,y])
+    print(f'Lapin de base aux coordonnées x={x} et y={y}')
+    liste_combinaison = [[x+1,y],[x+1,y-1],[x,y-1],[x-1,y-1],[x-1,y],[x-1,y+1],[x,y+1],[x+1,y+1]]
+    for x in range(0,len(liste_combinaison)-1):
+        if grid[liste_combinaison[x][0]][liste_combinaison[x][1]] != [] and grid[liste_combinaison[x][0]][liste_combinaison[x][1]] != '#':
+            if len(grid[liste_combinaison[x][0]][liste_combinaison[x][1]]) == 2:
+                xpro = liste_combinaison[x][0]
+                ypro = liste_combinaison[x][1]
+                print(f'Lapin trouvé aux coordonnées x={xpro} et y={ypro}')
+            #else:
+                print('Pas de lapin')
+    #print(liste)
+
 
 def Check(condition):
     for x in range(case):
@@ -159,7 +181,6 @@ def Check(condition):
                     else:
                         grid[x][y] = []
     #print(grid)
-
 
 
 #####
@@ -230,7 +251,8 @@ def Automatique():
 def Next():
     Check(1)
     Check(2)
-    Move()
+    #Move()
+    NaissanceV2()
     #Naissance()
    
 
