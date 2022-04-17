@@ -43,6 +43,15 @@ def SpawnA(nbr,animal):
             r1 = [randint(0,9),randint(0,9)]
         grid[r1[0]][r1[1]] = animal
 
+def Check(condition):
+    for x in range(case):
+        for y in range(case):
+            if len(grid[x][y])-1>=condition:
+                if grid[x][y][condition] > 1 :
+                    grid[x][y][condition] -= 1
+                else:
+                    grid[x][y] = []
+
 def Start():
     global grid
     grid =[[0 for i in range(10)]for j in range(10)] #Besoin de supprimer les anciens avant
