@@ -185,13 +185,12 @@ def Restart():
 
 
 def Next():
-    compteur = 0
     Check(1)
     #Check(2)
     Move()
     #Naissance()
     affGrid()
-    compteur+=1    
+   
 
 def affGrid():
     bordureFill(grid,case,'#')
