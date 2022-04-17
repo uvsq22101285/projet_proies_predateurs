@@ -79,6 +79,31 @@ def find():
     coordF=[]
     affGrid()
 
+def chasse():
+    #calculer dist min
+    print(coordF,coordP)
+    for i in range(len(coordF)):
+        listP=[]
+        for j in range(len(coordP)):
+            dx = coordP[j][0]-coordF[i][0]
+            dy = coordP[j][1]-coordF[i][1]
+            listP.append(max(abs(dx),abs(dy),dx,dy))
+        #trouver position du min
+        minVal = listP[0]
+        indx = 0
+        for k in range(len(listP)):
+            if listP[k] < minVal:
+                minVal = listP[k]
+                indx = k
+        dx =coordP[indx][0]-coordF[i][0]
+        dy =coordP[indx][1]-coordF[i][1]
+        dist=[dx,dy]
+        for n in range(2):
+            if dist[n]!=0:
+                dist[n]= dist[n]//abs(dist[n]) #deplace de 1
+        grid[coordF[i][0]+dist[0]][coordF[i][1]+dist[1]] = grid[coordF[i][0]][coordF[i][1]]
+        grid[coordF[i][0]][coordF[i][1]] = []
+        
 Start()
 
 BtnRandom = Button(root,text='Random', command=Start)
