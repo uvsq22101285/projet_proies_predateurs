@@ -23,9 +23,14 @@ taille_case= 600/case
 Npro = 10
 #fréquences d'apparition des lapins à chaque tour
 Fpro =1
-Apro = 10
+#Durée de vie en tour
+Apro = 5
+
+#########
+#Variables temporaires utilisés dans les fonctions pour les proies
 xpro = 0
 ypro = 0
+
 ###########
 #Predateur
 Npre = 5
@@ -116,58 +121,77 @@ def NaissanceV2():
         for y in range(case):
             if len(grid[x][y]) == 2:
                 xpro,ypro = 0,0
-                print('avant detect',xpro,ypro)
+                #print('avant detect',xpro,ypro)
                 Detect(x,y,grid)
                 print('après detect',xpro,ypro)
-                if xpro != 0 and ypro != 0:
+                if xpro != 0 :
+                    print('gui1')
                     if grid[xpro][ypro][1] != 5:
-                        SpawnProNaissance(x,y,xpro,ypro)
-    affGrid()
-    print('gui')
+                        print('gui2')
+                        print(liste_pro)
+                        if [xpro,ypro] not in liste_pro:
+                            print('gui3')
+                            SpawnProNaissance(x,y,xpro,ypro)
+
+    affGrid()               
                     
-                    
+
+###marche pas
 def SpawnProNaissance(x,y,xpro,ypro):
-    global grid
+    global grid, liste_pro
     liste_x = [x, x+1,x-1]
     liste_xpro = [xpro,xpro+1,xpro-1]
     liste_y = [y, y+1, y-1]
     liste_ypro = [ypro,ypro+1,ypro-1]
     liste = [liste_x] + [liste_y] + [liste_xpro] + [liste_ypro]
-    liste_final = []
+    liste_final = [0,0]
 
-    if liste[rd.randint(0,3)] == liste[0] or liste[rd.randint(0,3)] == liste[2]:
-        liste_final.append(liste[0][rd.randint(0,2)])
-        liste_final.append(liste[2][rd.randint(0,2)])
-    else:
-        liste_final.append(liste[1][rd.randint(0,2)])
-        liste_final.append(liste[3][rd.randint(0,2)])
 
-    if grid[liste_final[0]][liste_final[1]] != []:
-        while grid[liste_final[0]][liste_final[1]] != []:
+    while grid[liste_final[0]][liste_final[1]] != []:
+        #condition fausse 
+        if liste[rd.randint(0,3)] == liste[0] or liste[rd.randint(0,3)] == liste[2]:
+            print('guispawnx',grid[liste_final[0]][liste_final[1]],liste_final)
+            liste_final= []
+            liste_final.append([[liste_x[rd.randint(0,2)]],[liste_y[rd.randint(0,2)]]])
+            if (liste_final[0] == x and liste_final[1] == y ) or (liste_final[0] == xpro and liste_final[1] == ypro ):
+                print('guispawnx1')
+                while (liste_final[0] == x and liste_final[1] == y ) or (liste_final[0] == xpro and liste_final[1] == ypro ):
+                    liste_final = []
+                    liste_final.append([[liste_x[rd.randint(0,2)]],[liste_y[rd.randint(0,2)]]])
+                    print('guispawnx2')
+        else:
             liste_final = []
-            if liste[rd.randint(0,3)] == liste[0] or liste[rd.randint(0,3)] == liste[2]:
-                liste_final.append(liste[0][rd.randint(0,2)])
-                liste_final.append(liste[2][rd.randint(0,2)])
-            else:
-                liste_final.append(liste[1][rd.randint(0,2)])
-                liste_final.append(liste[3][rd.randint(0,2)])
+            liste_final.append([[liste_xpro[rd.randint(0,2)]],[liste_ypro[rd.randint(0,2)]]])
+            print('guispawnxpro',grid[liste_final[0]][liste_final[1]],liste_final)
+            if (liste_final[0] == x and liste_final[1] == y ) or (liste_final[0] == xpro and liste_final[1] == ypro ):
+                print('guispawnxpro1')
+                while (liste_final[0] == x and liste_final[1] == y ) or (liste_final[0] == xpro and liste_final[1] == ypro ):
+                    liste_final = []
+                    liste_final.append([[liste_xpro[rd.randint(0,2)]],[liste_ypro[rd.randint(0,2)]]])
+                    print('guispawnxpro2')
 
-    SpawnPro(liste_final[0],liste_final[1],grid)      
 
+
+    #liste_pro.append([liste_final[0],liste_final[1]])
+    print('Voici la liste final=',liste_final)
+    #SpawnPro(liste_final[0],liste_final[1],grid)
+
+
+####Marche
 def Detect(x,y,grid):
     global xpro, ypro,liste
-    compteur = 0
+    #compteur = 0
     liste_pro.append([x,y])
     print(f'Lapin de base aux coordonnées x={x} et y={y}')
     liste_combinaison = [[x+1,y],[x+1,y-1],[x,y-1],[x-1,y-1],[x-1,y],[x-1,y+1],[x,y+1],[x+1,y+1]]
-    for x in range(0,len(liste_combinaison)-1):
-        if grid[liste_combinaison[x][0]][liste_combinaison[x][1]] != [] and grid[liste_combinaison[x][0]][liste_combinaison[x][1]] != '#':
-            if len(grid[liste_combinaison[x][0]][liste_combinaison[x][1]]) == 2:
-                xpro = liste_combinaison[x][0]
-                ypro = liste_combinaison[x][1]
+    for i in range(0,len(liste_combinaison)-1):
+        if grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != [] and grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != '#':
+            if len(grid[liste_combinaison[i][0]][liste_combinaison[i][1]]) == 2:
+                xpro = liste_combinaison[i][0]
+                ypro = liste_combinaison[i][1]
                 print(f'Lapin trouvé aux coordonnées x={xpro} et y={ypro}')
             #else:
-                print('Pas de lapin')
+                #print('Pas de lapin')
     #print(liste)
 
 
@@ -250,8 +274,8 @@ def Automatique():
 def Next():
     Check(1)
     Check(2)
-    Move()
-    #NaissanceV2()
+    #Move()
+    NaissanceV2()
     #Naissance()
    
 
@@ -261,8 +285,21 @@ def affGrid():
         for y in range(case):
             canvas.create_image(x*64,y*64,image=sol,anchor=NW)
             if len(grid[x][y]) == 2:
-                canvas.create_image(x*64,y*64,image=rabbit, anchor=NW)
-                coordR.append([x,y])
+                if grid[x][y][1] == 5 :
+                    canvas.create_image(x*64,y*64,image=rabbit5, anchor=NW)
+                    coordR.append([x,y])
+                elif grid[x][y][1] == 4 :
+                    canvas.create_image(x*64,y*64,image=rabbit4, anchor=NW)
+                    coordR.append([x,y])
+                elif grid[x][y][1] == 3 :
+                    canvas.create_image(x*64,y*64,image=rabbit3, anchor=NW)
+                    coordR.append([x,y])
+                elif grid[x][y][1] == 2 :
+                    canvas.create_image(x*64,y*64,image=rabbit2, anchor=NW)
+                    coordR.append([x,y])
+                elif grid[x][y][1] == 1 :
+                    canvas.create_image(x*64,y*64,image=rabbit1, anchor=NW)
+                    coordR.append([x,y])
             if len(grid[x][y]) ==3:
                 canvas.create_image(x*64,y*64,image=fox, anchor=NW)
                 coordF.append([x,y])
@@ -285,7 +322,11 @@ BtnAuto = Button(root, text='Auto', command=Automatique).grid(column=1,row=1)
 
 #Images Projet
 sol = PhotoImage(file ="carré_sol.png")
-rabbit = PhotoImage(file="rabbit.png")
+rabbit1 = PhotoImage(file="rabbit1.png")
+rabbit2 = PhotoImage(file="rabbit2.png")
+rabbit3 = PhotoImage(file="rabbit3.png")
+rabbit4 = PhotoImage(file="rabbit4.png")
+rabbit5 = PhotoImage(file="rabbit5.png")
 fox = PhotoImage(file="fox.png")
 mur = PhotoImage(file='Mur2.png')
 
