@@ -279,9 +279,8 @@ def Next():
     coordF,coordR=[],[]
     Check(1)
     Check(2)
-    #Move()
+    Move()
     NaissanceV2()
-    #Naissance()
     liste_pro=[]
    
 
