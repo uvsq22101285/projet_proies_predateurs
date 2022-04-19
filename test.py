@@ -53,30 +53,32 @@ def Check(condition):
                 else:
                     grid[x][y] = []
 
-def flare(x,y):
-    if len(grid[x][y]) == 3:
-        listP=[]
-        for j in range(len(coordP)):
-            dx = coordP[j][0]-x
-            dy = coordP[j][1]-y
-            listP.append(max(abs(dx),abs(dy)))
-        minVal = listP[0]
-        indx = 0
-    #return index min
-        for k in range(len(listP)):
-            if listP[k] < minVal:
-                minVal = listP[k]
-                indx = k 
-        print('cible',coordP[k])        
-    #coord min
-        dx =coordP[indx][0]-x
-        dy =coordP[indx][1]-y
-        dist=[dx,dy]
-        print('dist',dist)
-        for n in range(2):
-            if dist[n]!=0:
-                dist[n]= dist[n]//abs(dist[n]) #deplace de 1
-        return(x+dist[0],y+dist[1])
+def Flair(x,y): #Fonction déplacement renard
+    global coordPro
+    global xpre,ypre
+    #calcul distances
+    dist = []
+    for i in range(len(coordPro)):
+        dist.append([coordPro[i][0]-x,coordPro[i][1]-y])
+    print()
+    print(f'la distance de {[x,y]} entre chaque est {dist}')
+
+    #calcul min dist
+    minVal = max(abs(dist[0][0]),abs(dist[0][1]))
+    print('minimum départ',minVal)
+    minIndx = 0
+    for j in range(len(dist)):
+        if minVal > max(abs(dist[j][0]),abs(dist[j][1])):
+            minVal = max(abs(dist[j][0]),abs(dist[j][1]))
+            minIndx = j
+    print(f'min arrivé {minVal} en {minIndx}')
+    print(f'plus proche ?{coordPro[minIndx]}')
+    for k in range(2):
+        if dist[minIndx][k]!=0:
+            dist[minIndx][k] =dist[minIndx][k]//abs(dist[minIndx][k])
+    xpre = dist[minIndx][0]+x
+    ypre = dist[minIndx][1]+y
+    print(xpre,ypre)
 
 def Start():
     global grid
