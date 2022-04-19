@@ -49,6 +49,7 @@ compteur = 0
 newGrid = []
 liste_pro = []
 
+
 #Grille 
 grid = [[[] for x in range(case)]for y in range(case)]
 
@@ -75,7 +76,7 @@ def SpawnPre(x,y,grid):
 
 #commencement de la partie
 def Start(widget):
-    global coordF
+    global coordF,compteur
     affGrid()
     for _ in range(Npro):
         Random()
@@ -94,6 +95,7 @@ def Start(widget):
     
     widget.grid_forget()
     BtnNext.grid(column=0, row=1)
+    compteur=1
     affGrid()
 
 
@@ -264,8 +266,12 @@ def Restart(widget):
     affGrid()
 
 def Automatique():
-    for _ in range(10): #à modifer 
-        root.after(3000,Next())
+    global compteur
+    if compteur == 0:
+        Start(BtnStart)
+    Next()
+    affGrid()
+    
 
 
 def Next():
