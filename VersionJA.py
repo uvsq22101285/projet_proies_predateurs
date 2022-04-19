@@ -1,6 +1,7 @@
 #Import des librairies
 from tkinter import *
 import random as rd
+from tkinter.tix import COLUMN
 from PIL import ImageTk, Image
 
 
@@ -74,6 +75,7 @@ def SpawnPre(x,y,grid):
 
 #commencement de la partie
 def Start(widget):
+    global coordF
     affGrid()
     for _ in range(Npro):
         Random()
@@ -87,6 +89,8 @@ def Start(widget):
             while grid[xpro][ypro]!= []:
                 Random()
         SpawnPre(xpro,ypro,grid)
+        coordF.append([xpro,ypro])
+
     
     widget.grid_forget()
     BtnNext.grid(column=0, row=1)
@@ -125,12 +129,12 @@ def NaissanceV2():
                 Detect(x,y,grid)
                 print('après detect',xpro,ypro)
                 if xpro != 0 :
-                    print('gui1')
+                    print('Il y a bien un lapin')
                     if grid[xpro][ypro][1] != 5:
-                        print('gui2')
-                        print(liste_pro)
+                        print('Il ne vient pas de naître')
+                        #print(liste_pro)
                         if [xpro,ypro] not in liste_pro:
-                            print('gui3')
+                            print("il n'a pas déjà baisé")
                             SpawnProNaissance(x,y,xpro,ypro)
 
     affGrid()               
@@ -144,37 +148,28 @@ def SpawnProNaissance(x,y,xpro,ypro):
     liste_y = [y, y+1, y-1]
     liste_ypro = [ypro,ypro+1,ypro-1]
     liste = [liste_x] + [liste_y] + [liste_xpro] + [liste_ypro]
-    liste_final = [0,0]
+    liste_final = []
+    liste_combinaisonxy = [[x+1,y],[x+1,y-1],[x,y-1],[x-1,y-1],[x-1,y],[x-1,y+1],[x,y+1],[x+1,y+1]]
+    liste_combinaisonxproypro = [[xpro+1,ypro],[xpro+1,ypro-1],[xpro,ypro-1],[xpro-1,ypro-1],[xpro-1,ypro],[xpro-1,ypro+1],[xpro,ypro+1],[xpro+1,ypro+1]]
+    liste_free = []
 
-
-    while grid[liste_final[0]][liste_final[1]] != []:
-        #condition fausse 
-        if liste[rd.randint(0,3)] == liste[0] or liste[rd.randint(0,3)] == liste[2]:
-            print('guispawnx',grid[liste_final[0]][liste_final[1]],liste_final)
-            liste_final= []
-            liste_final.append([[liste_x[rd.randint(0,2)]],[liste_y[rd.randint(0,2)]]])
-            if (liste_final[0] == x and liste_final[1] == y ) or (liste_final[0] == xpro and liste_final[1] == ypro ):
-                print('guispawnx1')
-                while (liste_final[0] == x and liste_final[1] == y ) or (liste_final[0] == xpro and liste_final[1] == ypro ):
-                    liste_final = []
-                    liste_final.append([[liste_x[rd.randint(0,2)]],[liste_y[rd.randint(0,2)]]])
-                    print('guispawnx2')
+    choix = []
+    choix = liste[rd.randint(0,3)]
+    for i in range(0,len(liste_combinaisonxy)):
+        if choix == liste[0] or choix == liste[2]:
+            if (grid[liste_combinaisonxy[i][0]][liste_combinaisonxy[i][1]]) == []:
+                print('x')
+                liste_free.append([liste_combinaisonxy[i][0],liste_combinaisonxy[i][1]])
         else:
-            liste_final = []
-            liste_final.append([[liste_xpro[rd.randint(0,2)]],[liste_ypro[rd.randint(0,2)]]])
-            print('guispawnxpro',grid[liste_final[0]][liste_final[1]],liste_final)
-            if (liste_final[0] == x and liste_final[1] == y ) or (liste_final[0] == xpro and liste_final[1] == ypro ):
-                print('guispawnxpro1')
-                while (liste_final[0] == x and liste_final[1] == y ) or (liste_final[0] == xpro and liste_final[1] == ypro ):
-                    liste_final = []
-                    liste_final.append([[liste_xpro[rd.randint(0,2)]],[liste_ypro[rd.randint(0,2)]]])
-                    print('guispawnxpro2')
+            if (grid[liste_combinaisonxproypro[i][0]][liste_combinaisonxproypro[i][1]]) == []:
+                print('xpro')
+                liste_free.append([liste_combinaisonxproypro[i][0],liste_combinaisonxproypro[i][1]])
+                print(liste_free)
 
-
-
-    #liste_pro.append([liste_final[0],liste_final[1]])
-    print('Voici la liste final=',liste_final)
-    #SpawnPro(liste_final[0],liste_final[1],grid)
+    if len(liste_free)>0:
+        liste_final.append(liste_free[rd.randint(0,len(liste_free)-1)][0])
+        liste_final.append(liste_free[rd.randint(0,len(liste_free)-1)][1])
+        SpawnPro(liste_final[0],liste_final[1],grid)
 
 
 ####Marche
@@ -184,7 +179,7 @@ def Detect(x,y,grid):
     liste_pro.append([x,y])
     print(f'Lapin de base aux coordonnées x={x} et y={y}')
     liste_combinaison = [[x+1,y],[x+1,y-1],[x,y-1],[x-1,y-1],[x-1,y],[x-1,y+1],[x,y+1],[x+1,y+1]]
-    for i in range(0,len(liste_combinaison)-1):
+    for i in range(0,len(liste_combinaison)):
         if grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != [] and grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != '#':
             if len(grid[liste_combinaison[i][0]][liste_combinaison[i][1]]) == 2:
                 xpro = liste_combinaison[i][0]
@@ -261,9 +256,11 @@ def Move():
                     
 
 
-def Restart():
+def Restart(widget):
     global grid
     grid = [[[] for x in range(case)]for y in range(case)]
+    widget.grid(row = 1, column=1)
+    root.after(50,Start(BtnStart))
     affGrid()
 
 def Automatique():
@@ -272,11 +269,14 @@ def Automatique():
 
 
 def Next():
+    global coordF, coordR,liste_pro
+    coordF,coordR=[],[]
     Check(1)
     Check(2)
     #Move()
     NaissanceV2()
     #Naissance()
+    liste_pro=[]
    
 
 def affGrid():
@@ -315,7 +315,7 @@ canvas = Canvas(root, width = 760, height = 760,bg='green')
 canvas.grid(columnspan=1)
 BtnStart = Button(root,text='Start', command=lambda: Start(BtnStart))
 BtnStart.grid(column=0, row=1)
-BtnRestart = Button(root, text='Restart', command=Restart)
+BtnRestart = Button(root, text='Restart', command=lambda: Restart(BtnStart))
 BtnRestart.grid(row=0, column=1)
 BtnNext = Button(root, text='Next', command=Next)
 BtnAuto = Button(root, text='Auto', command=Automatique).grid(column=1,row=1)
