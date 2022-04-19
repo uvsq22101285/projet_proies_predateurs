@@ -1,0 +1,6 @@
+si le lapin choisit random n'as pas de place autour = boucle infini 
+  --> solution : si les 8 possibilités sont testés alors passé à l'autre lapin
+#réglé
+
+Fonction détect prend le dernier lapin détecter
+ --> demander au prof
