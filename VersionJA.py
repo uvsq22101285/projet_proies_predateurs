@@ -113,7 +113,7 @@ def bordureFill(g,l,b):
 ############
 
 
-def Naissance():
+def NaissanceV1():
     global Fpro
     for _ in range(Fpro):
         Random()
