@@ -1,9 +1,6 @@
 #Import des librairies
 from tkinter import *
 import random as rd
-from tkinter.tix import COLUMN
-from PIL import ImageTk, Image
-
 
 
 
