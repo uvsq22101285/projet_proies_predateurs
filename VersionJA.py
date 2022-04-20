@@ -31,7 +31,7 @@ ypro = 0
 #Predateur
 Npre = 7
 Apre = 7
-Epre = 5 
+Epre = 10
 xpre = 0
 ypre = 0
 
@@ -44,6 +44,7 @@ gridtemp = []
 compteur = 0
 newGrid = []
 liste_pro = []
+liste_probis = []
 
 
 #Grille 
@@ -218,13 +219,14 @@ def CalculPro(x,y, grid):
     if liste_temp != []:
         liste_final.append(liste_temp[rd.randint(0,len(liste_temp)-1)])
         xpro,ypro = liste_final[0][0],liste_final[0][1]
+    liste_probis.append([xpro,ypro])
+    
 
 
 #####
 #Fonction déplacement renard
 def Flair(x,y): #Fonction déplacement renard
-    global liste_pro
-    global xpre,ypre
+    global liste_pro,liste_probis,xpre,ypre
     #calcul distances
     dist = []
     for i in range(len(liste_pro)):
@@ -255,9 +257,6 @@ def newgrid():
     bordureFill(newGrid,case,'#')
 #####
 
-def Chasse():
-    pass
-
 def Move():
     global xpro, ypro,xpre,ypre, grid, gridtemp
     gridtemp = grid.copy()
@@ -283,8 +282,7 @@ def Move():
                 if grid[xpre][ypre] == [] and newGrid[xpre][ypre] == []:
                     newGrid[xpre][ypre] = temp.copy()
                 elif len(grid[xpre][ypre]) == 2 and len(newGrid[xpre][ypre]) == 2:
-                    Chasse()
-                    #newGrid[xpre][ypre] = temp.copy()       
+                    newGrid[xpre][ypre] = temp.copy()       
                 else:
                     newGrid[x][y] = temp.copy()
                 temp = []
@@ -314,13 +312,13 @@ def Retour():
     affGrid()
 
 def Next():
-    global coordF, coordR,liste_pro
+    global coordF, coordR,liste_pro,liste_probis
     coordF,coordR=[],[]
     Check(1)
     Check(2)
     Move()
-    NaissanceV2()
-    liste_pro=[]
+    #NaissanceV2()
+    liste_pro,liste_probis=[],[]
    
 
 def affGrid():
