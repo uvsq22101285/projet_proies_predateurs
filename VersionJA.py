@@ -208,12 +208,9 @@ def Check(condition):
 #Fonctions déplacement lapin
 def CalculPro(x,y, grid):
     global xpro, ypro
-    liste_x = [x, x+1,x-1]
-    liste_y = [y, y+1, y-1]
     liste_combinaisonxy = [[x+1,y],[x+1,y-1],[x,y-1],[x-1,y-1],[x-1,y],[x-1,y+1],[x,y+1],[x+1,y+1]]
     liste_temp = []
     liste_final = []
-
     xpro,ypro = x,y
     for i in range(0,len(liste_combinaisonxy)):
         if grid[liste_combinaisonxy[i][0]][liste_combinaisonxy[i][1]] == []:
@@ -269,8 +266,7 @@ def Move():
     for x in range(case):
         for y in range(case):
             if len(grid[x][y]) == 2 :
-                xpro = 0
-                ypro = 0
+                xpro,ypro = 0,0
                 temp = grid[x][y].copy()
                 CalculPro(x,y,grid)
                 grid[x][y] = []
