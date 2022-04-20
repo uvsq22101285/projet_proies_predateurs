@@ -5,12 +5,7 @@ from tkinter.tix import COLUMN
 from PIL import ImageTk, Image
 
 
-
-
 #Variables
-
-
-
 
 
 #Nombre de case fois lui même 
@@ -35,7 +30,7 @@ ypro = 0
 ###########
 #Predateur
 Npre = 7
-Apre = 5
+Apre = 7
 Epre = 5 
 xpre = 0
 ypre = 0
@@ -169,7 +164,6 @@ def SpawnProNaissance(x,y,xpro,ypro):
             if (grid[liste_combinaisonxproypro[i][0]][liste_combinaisonxproypro[i][1]]) == []:
                 #print('xpro')
                 liste_free.append([liste_combinaisonxproypro[i][0],liste_combinaisonxproypro[i][1]])
-                print(liste_free)
 
     if len(liste_free)>0:
         liste_final.append(liste_free[rd.randint(0,len(liste_free)-1)][0])
@@ -217,14 +211,19 @@ def CalculPro(x,y, grid):
     global xpro, ypro
     liste_x = [x, x+1,x-1]
     liste_y = [y, y+1, y-1]
+    liste_combinaisonxy = [[x+1,y],[x+1,y-1],[x,y-1],[x-1,y-1],[x-1,y],[x-1,y+1],[x,y+1],[x+1,y+1]]
+    liste_temp = []
+    liste_final = []
+
     xpro,ypro = x,y
-    while grid[xpro][ypro] != []:
-        xpro = liste_x[rd.randint(0,2)]
-        ypro = liste_y[rd.randint(0,2)]
-        if xpro == x and ypro == y:
-            while xpro == x and ypro == y:
-                xpro = liste_x[rd.randint(0,2)]
-                ypro = liste_y[rd.randint(0,2)]
+    for i in range(0,len(liste_combinaisonxy)):
+        if grid[liste_combinaisonxy[i][0]][liste_combinaisonxy[i][1]] == []:
+            liste_temp.append([liste_combinaisonxy[i][0],liste_combinaisonxy[i][1]])
+    if liste_temp != []:
+        liste_final.append(liste_temp[rd.randint(0,len(liste_temp)-1)])
+        xpro = liste_final[0][0]
+        ypro = liste_final[0][1]
+
 
 #####
 #Fonction déplacement renard
@@ -278,7 +277,6 @@ def Move():
                 temp = grid[x][y].copy()
                 CalculPro(x,y,grid)
                 grid[x][y] = []
-                print('lapin',grid[xpro][ypro],x,y,xpro,ypro)
                 if grid[xpro][ypro] == [] and newGrid[xpro][ypro] == []:
                     newGrid[xpro][ypro] = temp.copy()
                 else:
@@ -289,14 +287,12 @@ def Move():
                 temp = grid[x][y].copy()
                 Flair(x,y)
                 grid[x][y] = []
-                print('renard',grid[xpre][ypre],x,y,xpre,ypre)
                 if grid[xpre][ypre] == [] and newGrid[xpre][ypre] == []:
                     newGrid[xpre][ypre] = temp.copy()
                 elif len(grid[xpre][ypre]) == 2 and len(newGrid[xpre][ypre]) == 2:
                     Chasse()
                     #newGrid[xpre][ypre] = temp.copy()       
                 else:
-                    print('gui')
                     newGrid[x][y] = temp.copy()
                 temp = []
 
