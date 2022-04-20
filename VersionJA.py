@@ -182,8 +182,7 @@ def Detect(x,y,grid):
     for i in range(0,len(liste_combinaison)):
         if grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != [] and grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != '#':
             if len(grid[liste_combinaison[i][0]][liste_combinaison[i][1]]) == 2:
-                xpro = liste_combinaison[i][0]
-                ypro = liste_combinaison[i][1]
+                xpro,ypro = liste_combinaison[i][0],liste_combinaison[i][1]
                 #print(f'Lapin trouvé aux coordonnées x={xpro} et y={ypro}')
             #else:
                 #print('Pas de lapin')
@@ -221,8 +220,7 @@ def CalculPro(x,y, grid):
             liste_temp.append([liste_combinaisonxy[i][0],liste_combinaisonxy[i][1]])
     if liste_temp != []:
         liste_final.append(liste_temp[rd.randint(0,len(liste_temp)-1)])
-        xpro = liste_final[0][0]
-        ypro = liste_final[0][1]
+        xpro,ypro = liste_final[0][0],liste_final[0][1]
 
 
 #####
@@ -250,8 +248,7 @@ def Flair(x,y): #Fonction déplacement renard
     for k in range(2):
         if dist[minIndx][k]!=0:
             dist[minIndx][k] =dist[minIndx][k]//abs(dist[minIndx][k])
-    xpre = dist[minIndx][0]+x
-    ypre = dist[minIndx][1]+y
+    xpre,ypre = dist[minIndx][0]+x,dist[minIndx][1]+y
     #print(xpre,ypre)
 
 
