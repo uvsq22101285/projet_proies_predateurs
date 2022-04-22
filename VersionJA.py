@@ -13,7 +13,7 @@ taille_case= 600/case
 ###########
 #Proies
 #nombres de proies initiales
-Npro = 10
+Npro = 5
 #fréquences d'apparition des lapins à chaque tour
 Fpro =1
 #Durée de vie en tour
@@ -24,11 +24,15 @@ Apro = 5
 xpro = 0
 ypro = 0
 
+#liste des proies
+liste_pro = []
+liste_probis = []
+
 ###########
 #Predateur
 Npre = 7
-Apre = 7
-Epre = 10
+Apre = 15
+Epre = 5
 xpre = 0
 ypre = 0
 
@@ -40,8 +44,10 @@ coordF = []
 gridtemp = []
 compteur = 0
 newGrid = []
-liste_pro = []
-liste_probis = []
+
+#liste des prédateurs
+liste_preda = []
+
 
 
 #Grille 
@@ -120,8 +126,8 @@ def NaissanceV2():
     
     for x in range(case):
         for y in range(case):
+            xpro,ypro = 0,0
             if len(grid[x][y]) == 2:
-                xpro,ypro = 0,0
                 #print('avant detect',xpro,ypro)
                 Detect(x,y,grid)
                 #print('après detect',xpro,ypro)
@@ -134,6 +140,16 @@ def NaissanceV2():
                         if [xpro,ypro] not in liste_pro:
                             #print("il n'a pas déjà baisé")
                             SpawnProNaissance(x,y,xpro,ypro)
+            elif len(grid[x][y]) == 3:
+                Detect(x,y,grid)
+                if xpro != 0:
+                    #condition repro renard
+                    if grid[xpro][ypro][1] != 5 and grid[xpro][ypro][2] > 5:
+                        if [xpro,ypro] not in liste_preda:
+                            Random()
+                            SpawnPre(xpro,ypro,grid)
+                
+
 
     affGrid()               
                     
@@ -174,16 +190,24 @@ def Detect(x,y,grid):
     global xpro, ypro, liste_pro
     #compteur = 0
     liste_pro = []
-    liste_pro.append([x,y])
     #print(f'Lapin de base aux coordonnées x={x} et y={y}')
     liste_combinaison = [[x+1,y],[x+1,y-1],[x,y-1],[x-1,y-1],[x-1,y],[x-1,y+1],[x,y+1],[x+1,y+1]]
-    for i in range(0,len(liste_combinaison)):
-        if grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != [] and grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != '#':
-            if len(grid[liste_combinaison[i][0]][liste_combinaison[i][1]]) == 2:
-                xpro,ypro = liste_combinaison[i][0],liste_combinaison[i][1]
-                #print(f'Lapin trouvé aux coordonnées x={xpro} et y={ypro}')
-            #else:
-                #print('Pas de lapin')
+    if len(grid[x][y]) == 2:
+        for i in range(0,len(liste_combinaison)):
+            if grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != [] and grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != '#':
+                if len(grid[liste_combinaison[i][0]][liste_combinaison[i][1]]) == 2:
+                    xpro,ypro = liste_combinaison[i][0],liste_combinaison[i][1]
+                    pass
+                    #print(f'Lapin trouvé aux coordonnées x={xpro} et y={ypro}')
+    elif len(grid[x][y]) == 3:
+        #print(f'Renard de base aux coordonnées x={x} et y={y}')
+        for i in range(0,len(liste_combinaison)):
+            if grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != [] and grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != '#':
+                if len(grid[liste_combinaison[i][0]][liste_combinaison[i][1]]) == 3:
+                    xpro,ypro = liste_combinaison[i][0],liste_combinaison[i][1]
+                    #print(f'Renard trouvé aux coordonnées x={xpro} et y={ypro}')
+
+                
     #print(liste)
 
 
@@ -216,35 +240,40 @@ def CalculPro(x,y, grid):
     if liste_temp != []:
         liste_final.append(liste_temp[rd.randint(0,len(liste_temp)-1)])
         xpro,ypro = liste_final[0][0],liste_final[0][1]
-    liste_probis.append([xpro,ypro])
     
-
 
 #####
 #Fonction déplacement renard
 def Flair(x,y): #Fonction déplacement renard
-    global liste_pro,liste_probis,xpre,ypre
+    global liste_pro,liste_probis,xpre,ypre,liste_preda
     #calcul distances
     dist = []
-    for i in range(len(liste_pro)):
-        dist.append([liste_pro[i][0]-x,liste_pro[i][1]-y])
+    if liste_pro != [] or liste_probis != []:
+        for i in range(len(liste_pro)):
+            dist.append([liste_pro[i][0]-x,liste_pro[i][1]-y])
+        for u in range(len(liste_probis)):
+            dist.append([liste_probis[u][0]-x,liste_probis[u][1]-y])
     #print()
     #print(f'la distance de {[x,y]} entre chaque est {dist}')
 
     #calcul min dist
-    minVal = max(abs(dist[0][0]),abs(dist[0][1]))
+        minVal = max(abs(dist[0][0]),abs(dist[0][1]))
+
     #print('minimum départ',minVal)
-    minIndx = 0
-    for j in range(len(dist)):
-        if minVal > max(abs(dist[j][0]),abs(dist[j][1])):
-            minVal = max(abs(dist[j][0]),abs(dist[j][1]))
-            minIndx = j
+        minIndx = 0
+        for j in range(len(dist)):
+            if minVal > max(abs(dist[j][0]),abs(dist[j][1])):
+                minVal = max(abs(dist[j][0]),abs(dist[j][1]))
+                minIndx = j
     #print(f'min arrivé {minVal} en {minIndx}')
     #print(f'plus proche ?{coordPro[minIndx]}')
-    for k in range(2):
-        if dist[minIndx][k]!=0:
-            dist[minIndx][k] =dist[minIndx][k]//abs(dist[minIndx][k])
-    xpre,ypre = dist[minIndx][0]+x,dist[minIndx][1]+y
+        for k in range(2):
+            if dist[minIndx][k]!=0:
+                dist[minIndx][k] =dist[minIndx][k]//abs(dist[minIndx][k])
+        xpre,ypre = dist[minIndx][0]+x,dist[minIndx][1]+y
+        liste_preda.append([xpre,ypre])
+    else:
+        xpre,ypre = x,y
     #print(xpre,ypre)
 
 
@@ -255,12 +284,14 @@ def newgrid():
 #####
 
 def Move():
-    global xpro, ypro,xpre,ypre, grid, gridtemp
+    global xpro, ypro,xpre,ypre, grid, gridtemp,liste_pro,liste_probis
     gridtemp = grid.copy()
     temp = []
     newgrid()
+    #proies(grid)
     for x in range(case):
         for y in range(case):
+            #print('liste pro',liste_pro,'listeprobis',liste_probis)
             if len(grid[x][y]) == 2 :
                 xpro,ypro = 0,0
                 temp = grid[x][y].copy()
@@ -268,6 +299,9 @@ def Move():
                 grid[x][y] = []
                 if grid[xpro][ypro] == [] and newGrid[xpro][ypro] == []:
                     newGrid[xpro][ypro] = temp.copy()
+                    #print('va se faire supprimer',[x,y])
+                    del liste_pro[liste_pro.index([x,y])]
+                    liste_probis.append([xpro,ypro])
                 else:
                     newGrid[x][y] = temp.copy()
                 temp = []
@@ -278,16 +312,25 @@ def Move():
                 grid[x][y] = []
                 if grid[xpre][ypre] == [] and newGrid[xpre][ypre] == []:
                     newGrid[xpre][ypre] = temp.copy()
-                elif len(grid[xpre][ypre]) == 2 and len(newGrid[xpre][ypre]) == 2:
-                    newGrid[xpre][ypre] = temp.copy()       
+                elif len(grid[xpre][ypre]) == 2 or len(newGrid[xpre][ypre]) == 2:
+                    #if len(newGrid[xpre][ypre]) != 3 and len(grid[xpre][ypre] !=3):
+                    #print('liste pro',liste_pro,'listeprobis',liste_probis)
+                    grid[xpre][ypre] = []
+                    energie = rd.randint(0,5)
+                    newGrid[xpre][ypre] = temp.copy()
+                    newGrid[xpre][ypre][2] += energie
+                    if liste_pro.count([xpre,ypre]) > 0:
+                        del liste_pro[liste_pro.index([xpre,ypre])]
+                    else:
+                        del liste_probis[liste_probis.index([xpre,ypre])]
+
                 else:
                     newGrid[x][y] = temp.copy()
                 temp = []
-
+    print(liste_preda)
     grid = newGrid
     affGrid()
                     
-
 
 def Restart(widget):
     global grid
@@ -309,13 +352,14 @@ def Retour():
     affGrid()
 
 def Next():
-    global coordF, coordR,liste_pro,liste_probis
+    global coordF, coordR,liste_pro,liste_probis,liste_preda
     coordF,coordR=[],[]
     Check(1)
     Check(2)
     Move()
-    #NaissanceV2()
-    liste_pro,liste_probis=[],[]
+    NaissanceV2()
+    liste_pro,liste_probis,liste_preda=[],[],[]
+    print(grid)
    
 
 def affGrid():
