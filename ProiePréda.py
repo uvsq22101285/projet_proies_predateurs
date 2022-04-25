@@ -5,6 +5,7 @@
 # groupe MPCI 04
 # Eliott MOBRE
 # Jean-Alexandre SUZANNE
+# Rim GNICHI 
 # https://github.com/uvsq22101285/projet_tas_de_sable
 #########################################
 
