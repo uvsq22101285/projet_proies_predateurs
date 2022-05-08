@@ -41,6 +41,35 @@ PARTIE GRAPHIQUE :
 
 Ici nous allons vous détaillez à quelle rôle est attribué quelle image : 
 
-<img src="https://github.com/uvsq22101285/projet_proies_predateurs/blob/main/fox.png" alt="My cool logo"/>
+<img src="https://github.com/uvsq22101285/projet_proies_predateurs/blob/main/fox.png" alt="Le prédateur"/>
+
+Ce logo représente un Prédateur, il peut se déplacer, manger et se reproduire.
+Il se nourrit de Proies et leurs objectif est de manger toutes les proies en restant la seule espèce sur le terrain 
+
+<img src="https://github.com/uvsq22101285/projet_proies_predateurs/blob/main/rabbit.png" alt="La proie"/>
+
+Ce logo représente une Proie, il peut seulement se déplacer et se reproduire, son Objectif : Rester en vie ! 
+
+<img src="https://github.com/uvsq22101285/projet_proies_predateurs/blob/main/carr%C3%A9_sol.png" alt="Le sol"/>
+
+Ce logo représente le plateau sur lequel les spécimens se déplace et survive !
+
+<img src="https://github.com/uvsq22101285/projet_proies_predateurs/blob/main/Mur2.png" alt="Le sol"/>
+
+Ce logo représente les bordures du plateau, elles ne peuvent être franchies ! 
+
+<img src="https://github.com/uvsq22101285/projet_proies_predateurs/blob/main/Energie0.png" alt="Le sol"/>
+
+Ce logo représente l'énergie qui est une caractéristique spécifique aux prédateurs, elle n'excédera pas la valeur de 9 unités d'énergie graphique par manque de place graphique
+mais la valeur d'énergie supplémentaire sera tout de fois bien présente. Ce logo se situe en haut à droite des prédateurs.
+
+<img src="https://github.com/uvsq22101285/projet_proies_predateurs/blob/main/0.png" alt="Le sol"/>
+
+Ce logo représente le nombre de vies en tour qui reste à la proie ou au prédateur concerné. Ce logo se situe en haut à gauche des proies ou des prédateurs.
+
+
+
+
+
 
 
