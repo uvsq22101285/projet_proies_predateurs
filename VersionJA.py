@@ -15,7 +15,7 @@ taille_case= 600/case
 ###########
 #Proies
 #nombres de proies initiales
-Npro = 10
+Npro = 15
 #fréquences d'apparition des lapins à chaque tour
 Fpro =1
 #Durée de vie en tour
@@ -32,9 +32,9 @@ liste_probis = []
 
 ###########
 #Predateur
-Npre = 2
+Npre = 8
 Apre = 8
-Epre = 5
+Epre = 9
 xpre = 0
 ypre = 0
 
@@ -117,14 +117,6 @@ def bordureFill(g,l,b):
     return g
 ############
 
-
-def NaissanceV1():
-    global Fpro
-    for _ in range(Fpro):
-        Random()
-        SpawnPro(xpro,ypro,grid)
-    affGrid()
-
 def NaissanceV2():
     global xpro, ypro, grid
     
@@ -134,17 +126,16 @@ def NaissanceV2():
             if len(grid[x][y]) == 2:
                 Detect(x,y,grid)
                 if xpro != 0 :
-                    if grid[xpro][ypro][1] != 5:
+                    if grid[xpro][ypro][1] != Apro:
                         if [xpro,ypro] not in liste_pro:
                             SpawnProNaissance(x,y,xpro,ypro)
             elif len(grid[x][y]) == 3:
                 Detect(x,y,grid)
                 if xpro != 0:
                     #condition repro renard
-                    if grid[xpro][ypro][1] != 5 and grid[xpro][ypro][2] > 5:
-                        if [xpro,ypro] not in liste_preda:
-                            Random()
-                            SpawnPre(xpro,ypro,grid)
+                    if grid[xpro][ypro][1] != Apre and grid[xpro][ypro][2] > 5:
+                        Random()
+                        SpawnPre(xpro,ypro,grid)
                 
 
 
@@ -305,11 +296,12 @@ def Move():
                     
 
 def Restart(widget):
-    global grid
+    global grid, save
     grid = [[[] for x in range(case)]for y in range(case)]
     widget.grid(row = 1, column=1)
     root.after(50,Start(BtnStart))
     affGrid()
+    save = []
 
 def Retour():
     global grid, gridtemp,save
@@ -355,24 +347,61 @@ def affGrid():
         for y in range(case):
             canvas.create_image(x*64,y*64,image=sol,anchor=NW)
             if len(grid[x][y]) == 2:
-                if grid[x][y][1] == 5 :
-                    canvas.create_image(x*64,y*64,image=rabbit5, anchor=NW)
-                    coordR.append([x,y])
-                elif grid[x][y][1] == 4 :
-                    canvas.create_image(x*64,y*64,image=rabbit4, anchor=NW)
-                    coordR.append([x,y])
-                elif grid[x][y][1] == 3 :
-                    canvas.create_image(x*64,y*64,image=rabbit3, anchor=NW)
-                    coordR.append([x,y])
-                elif grid[x][y][1] == 2 :
-                    canvas.create_image(x*64,y*64,image=rabbit2, anchor=NW)
-                    coordR.append([x,y])
-                elif grid[x][y][1] == 1 :
-                    canvas.create_image(x*64,y*64,image=rabbit1, anchor=NW)
-                    coordR.append([x,y])
-            if len(grid[x][y]) ==3:
+                canvas.create_image(x*64,y*64,image=rabbit, anchor=NW)
+                coordR.append([x,y])
+                if grid[x][y][1] == 5:
+                    canvas.create_image(x*64,y*64,image=Image5, anchor=NW)
+                if grid[x][y][1] == 4:
+                    canvas.create_image(x*64,y*64,image=Image4, anchor=NW)
+                if grid[x][y][1] == 3:
+                    canvas.create_image(x*64,y*64,image=Image3, anchor=NW)
+                if grid[x][y][1] == 2:
+                    canvas.create_image(x*64,y*64,image=Image2, anchor=NW)
+                if grid[x][y][1] == 1:
+                    canvas.create_image(x*64,y*64,image=Image1, anchor=NW)
+                
+                    
+            if len(grid[x][y]) == 3:
                 canvas.create_image(x*64,y*64,image=fox, anchor=NW)
                 coordF.append([x,y])
+                #Partie Vie
+                if grid[x][y][1] > 8:
+                    canvas.create_image(x*64,y*64,image=Image9, anchor=NW)
+                if grid[x][y][1] == 8:
+                    canvas.create_image(x*64,y*64,image=Image8, anchor=NW)
+                if grid[x][y][1] == 7:
+                    canvas.create_image(x*64,y*64,image=Image7, anchor=NW)
+                if grid[x][y][1] == 6:
+                    canvas.create_image(x*64,y*64,image=Image6, anchor=NW)
+                if grid[x][y][1] == 5:
+                    canvas.create_image(x*64,y*64,image=Image5, anchor=NW)
+                if grid[x][y][1] == 4:
+                    canvas.create_image(x*64,y*64,image=Image4, anchor=NW)
+                if grid[x][y][1] == 3:
+                    canvas.create_image(x*64,y*64,image=Image3, anchor=NW)
+                if grid[x][y][1] == 2:
+                    canvas.create_image(x*64,y*64,image=Image2, anchor=NW)
+                if grid[x][y][1] == 1:
+                    canvas.create_image(x*64,y*64,image=Image1, anchor=NW)
+                #Partie Energie
+                if grid[x][y][2] > 8:
+                    canvas.create_image(x*64,y*64,image=Energie9, anchor=NW)
+                if grid[x][y][2] == 8:
+                    canvas.create_image(x*64,y*64,image=Energie8, anchor=NW)
+                if grid[x][y][2] == 7:
+                    canvas.create_image(x*64,y*64,image=Energie7, anchor=NW)
+                if grid[x][y][2] == 6:
+                    canvas.create_image(x*64,y*64,image=Energie6, anchor=NW)
+                if grid[x][y][2] == 5:
+                    canvas.create_image(x*64,y*64,image=Energie5, anchor=NW)
+                if grid[x][y][2] == 4:
+                    canvas.create_image(x*64,y*64,image=Energie4, anchor=NW)
+                if grid[x][y][2] == 3:
+                    canvas.create_image(x*64,y*64,image=Energie3, anchor=NW)
+                if grid[x][y][2] == 2:
+                    canvas.create_image(x*64,y*64,image=Energie2, anchor=NW)
+                if grid[x][y][2] == 1:
+                    canvas.create_image(x*64,y*64,image=Energie1, anchor=NW)
             if grid[x][y] == '#':
                 canvas.create_image(x*64,y*64,image=mur, anchor=NW)
     canvas.grid()
@@ -392,12 +421,28 @@ BtnRetour = Button(root, text='Retour', command=Retour).grid(column=1,row=1)
 
 #Images Projet
 sol = PhotoImage(file ="carré_sol.png")
-rabbit1 = PhotoImage(file="rabbit1.png")
-rabbit2 = PhotoImage(file="rabbit2.png")
-rabbit3 = PhotoImage(file="rabbit3.png")
-rabbit4 = PhotoImage(file="rabbit4.png")
-rabbit5 = PhotoImage(file="rabbit5.png")
+rabbit = PhotoImage(file="rabbit.png")
 fox = PhotoImage(file="fox.png")
 mur = PhotoImage(file='Mur2.png')
+Image0 = PhotoImage(file="0.png")
+Image1 = PhotoImage(file="1.png")
+Image2 = PhotoImage(file="2.png")
+Image3 = PhotoImage(file="3.png")
+Image4 = PhotoImage(file="4.png")
+Image5 = PhotoImage(file="5.png")
+Image6 = PhotoImage(file="6.png")
+Image7 = PhotoImage(file="7.png")
+Image8 = PhotoImage(file="8.png")
+Image9 = PhotoImage(file="9.png")
+Energie0 = PhotoImage(file="Energie0.png")
+Energie1 = PhotoImage(file="Energie1.png")
+Energie2 = PhotoImage(file="Energie2.png")
+Energie3 = PhotoImage(file="Energie3.png")
+Energie4 = PhotoImage(file="Energie4.png")
+Energie5 = PhotoImage(file="Energie5.png")
+Energie6 = PhotoImage(file="Energie6.png")
+Energie7 = PhotoImage(file="Energie7.png")
+Energie8 = PhotoImage(file="Energie8.png")
+Energie9 = PhotoImage(file="Energie9.png")
 
 root.mainloop()
