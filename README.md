@@ -41,5 +41,6 @@ PARTIE GRAPHIQUE :
 
 Ici nous allons vous détaillez à quelle rôle est attribué quelle image : 
 
-https://github.com/uvsq22101285/projet_proies_predateurs/blob/main/fox.png
+<img src="https://github.com/uvsq22101285/projet_proies_predateurs/blob/main/fox.png" alt="My cool logo"/>
+
 
