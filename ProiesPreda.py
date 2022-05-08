@@ -229,7 +229,6 @@ def Flair(x,y): #Fonction déplacement renard
         for u in range(len(liste_probis)):
             if max(abs(liste_probis[u][0]-x),abs(liste_probis[u][1]-y)) <distMax:
                 dist.append([liste_probis[u][0]-x,liste_probis[u][1]-y])
-        print(dist)
         if dist!=[]:       
             minVal = max(abs(dist[0][0]),abs(dist[0][1]))
             minIndx = 0
