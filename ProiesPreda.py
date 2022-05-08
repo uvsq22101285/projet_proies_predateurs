@@ -103,6 +103,7 @@ def Start(widget):
     gridtemp = grid.copy()
     widget.grid_forget()
     BtnNext.grid(column=1, row=1)
+    
     affGrid()
 
 
@@ -121,7 +122,7 @@ def loading():
     fic = open('ficSauvegarde','r')
     for line in fic:
         grid.append(ast.literal_eval(line))
-    
+
 ####ajout bordure plateau###
 def bordureFill(g,l,b):
     for i in range(l):
