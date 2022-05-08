@@ -107,29 +107,21 @@ def Start(widget):
     loading()
 
 ###################
-def saving():
-    fic = open('ficSauvegarde','w')
+def saving(grid, filename):
+    toSave=pil.Image.new("RGBA",(len(grid),len(grid[0])))
     for i in range(len(grid)):
         for j in range(len(grid[0])):
-            fic.write(str(grid[i][j]))
-            fic.write('_')
-        fic.write('\n')
-    fic.close()    
+            toSave.putpixel((i,j),grid[j][i])
+    toSave.save(filename)
 
-def loading():
-    global grid
-    grid =[]
-    fic = open('ficSauvegarde','r')
-    for line in fic:
-        column = [] 
-        for k in line.split('_'):
-            if k == '\n':
-                pass
-            else:
-                column.append(k)
-        grid.append(column)
-    affGrid()
 
+def loading(filename):
+    toLoad=pil.Image.open(filename)
+    mat=[[(255,255,255,255)]*toLoad.size[0] for k in range(toLoad.size[1])]
+    for i in range(toLoad.size[1]):
+        for j in range(toLoad.size[0]):
+            mat[i][j]=toLoad.getpixel((j,i))
+    return mat
 ####ajout bordure plateau###
 def bordureFill(g,l,b):
     for i in range(l):
