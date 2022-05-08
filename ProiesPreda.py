@@ -12,7 +12,7 @@ case = 12
 taille_image = 32
 Taille_canvas = case * taille_image
 
-
+#taille_image//64  
 
 ###########
 #Proies
