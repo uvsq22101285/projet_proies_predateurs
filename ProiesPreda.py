@@ -8,7 +8,7 @@ from tkinter import messagebox as box
 #Variables
 
 #Paramètres Partie
-case = 22
+case = 32
 taille_image = 32
 Taille_canvas = (case * taille_image)-2
 vitesse = 60
@@ -17,7 +17,7 @@ vitesse = 60
 ###########
 #Proies
 #nombres de proies initiales
-Npro = 15
+Npro = 5
 #Durée de vie en tour
 Apro = 5
 
@@ -32,9 +32,9 @@ liste_probis = []
 
 ###########
 #Predateur
-Npre = 8
-Apre = 8
-Epre = 9
+Npre = 5
+Apre = 7
+Epre = 5
 xpre = 0
 ypre = 0
 
@@ -121,6 +121,8 @@ def bordureFill(g,l,b):
 def NaissanceV2():
     global xpro, ypro, grid
     
+    accoupler_pro = []
+    accoupler_pre = []
     for x in range(case):
         for y in range(case):
             xpro,ypro = 0,0
@@ -128,15 +130,18 @@ def NaissanceV2():
                 Detect(x,y,grid)
                 if xpro != 0 :
                     if grid[xpro][ypro][1] != Apro:
-                        if [xpro,ypro] not in liste_pro:
+                        if [xpro,ypro] not in accoupler_pro:
+                            accoupler_pro.append([x,y])
+                            accoupler_pro.append([xpro,ypro])
                             SpawnProNaissance(x,y,xpro,ypro)
             elif len(grid[x][y]) == 3:
                 Detect(x,y,grid)
                 if xpro != 0:
                     #condition repro renard
                     if grid[xpro][ypro][1] != Apre and grid[xpro][ypro][2] > 5:
-                        Random()
-                        SpawnPre(xpro,ypro,grid)
+                        if [xpro,ypro] not in accoupler_pre:
+                            Random()
+                            SpawnPre(xpro,ypro,grid)
                 
 
 
@@ -176,18 +181,24 @@ def SpawnProNaissance(x,y,xpro,ypro):
 def Detect(x,y,grid):
     global xpro, ypro, liste_pro
     liste_pro = []
+    random = []
     liste_combinaison = [[x+1,y],[x+1,y-1],[x,y-1],[x-1,y-1],[x-1,y],[x-1,y+1],[x,y+1],[x+1,y+1]]
     if len(grid[x][y]) == 2:
         for i in range(0,len(liste_combinaison)):
             if grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != [] and grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != '#':
                 if len(grid[liste_combinaison[i][0]][liste_combinaison[i][1]]) == 2:
                     xpro,ypro = liste_combinaison[i][0],liste_combinaison[i][1]
-                    pass
+                    random.append([xpro,ypro])
     elif len(grid[x][y]) == 3:
         for i in range(0,len(liste_combinaison)):
             if grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != [] and grid[liste_combinaison[i][0]][liste_combinaison[i][1]] != '#':
                 if len(grid[liste_combinaison[i][0]][liste_combinaison[i][1]]) == 3:
                     xpro,ypro = liste_combinaison[i][0],liste_combinaison[i][1]
+                    random.append([xpro,ypro])
+    if random != []:
+        chiffre = rd.randint(0,len(random)-1)
+        xpro = random[chiffre][0]
+        ypro = random[chiffre][1]
 
 
 def Check(condition):
@@ -359,7 +370,7 @@ def Reglages():
     BtnNpre.grid(column =0,row=2)
     BtnApro = Button(fenetre, text='Apro', command=lambda: Selection(3))
     BtnApro.grid(column =0,row=3)
-    BtnApro = Button(fenetre, text='Apro', command=lambda: Selection(4))
+    BtnApro = Button(fenetre, text='Apre', command=lambda: Selection(4))
     BtnApro.grid(column =0,row=4)
     BtnEpro = Button(fenetre, text="Epro", command=lambda: Selection(5))
     BtnEpro.grid(column =0,row=5)
