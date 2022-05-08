@@ -8,8 +8,8 @@ from tkinter import messagebox as box
 #Variables
 
 #Paramètres Partie
-case = 12
-taille_image = 32
+case = 30
+taille_image = 16
 Taille_canvas = case * taille_image
 
 #taille_image//64  
@@ -103,9 +103,32 @@ def Start(widget):
     widget.grid_forget()
     BtnNext.grid(column=0, row=1)
     affGrid()
-
+    saving()
+    loading()
 
 ###################
+def saving():
+    fic = open('ficSauvegarde','w')
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            fic.write(str(grid[i][j]))
+            fic.write('_')
+        fic.write('\n')
+    fic.close()    
+
+def loading():
+    global grid
+    grid =[]
+    fic = open('ficSauvegarde','r')
+    for line in fic:
+        column = [] 
+        for k in line.split('_'):
+            if k == '\n':
+                pass
+            else:
+                column.append(k)
+        grid.append(column)
+    affGrid()
 
 ####ajout bordure plateau###
 def bordureFill(g,l,b):
