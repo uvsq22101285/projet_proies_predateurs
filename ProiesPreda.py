@@ -38,6 +38,7 @@ Apre = 7
 Epre = 5
 xpre = 0
 ypre = 0
+dist_Max = 8
 
 #Position objet
 coordR = []
@@ -49,6 +50,7 @@ newGrid = []
 condition = False
 compteur = 0
 variable = 0
+
 
 #liste des prédateurs
 liste_preda = []
@@ -110,6 +112,9 @@ def Start(widget):
 ###################
 
 def saving():
+    """
+    Fonction qui sert à sauvegarder la matrice
+    """
     fic = open('ficSauvegarde','w')
     for i in range(len(grid)):
            fic.write(str(grid[i])+'\n')
@@ -266,22 +271,25 @@ def Flair(x,y): #Fonction déplacement renard
     dist = []
     if liste_pro != [] or liste_probis != []:
         for i in range(len(liste_pro)):
-            dist.append([liste_pro[i][0]-x,liste_pro[i][1]-y])
+            if max(abs(liste_pro[i][0]-x),abs(liste_pro[i][1]-y)) <= dist_Max:
+                dist.append([liste_pro[i][0]-x,liste_pro[i][1]-y])
         for u in range(len(liste_probis)):
-            dist.append([liste_probis[u][0]-x,liste_probis[u][1]-y])
+            if max(abs(liste_probis[u][0]-x),abs(liste_probis[u][1]-y)) <= dist_Max:
+                dist.append([liste_probis[u][0]-x,liste_probis[u][1]-y])
 
-        minVal = max(abs(dist[0][0]),abs(dist[0][1]))
-        minIndx = 0
+        if dist > 1 :  
+            minVal = max(abs(dist[0][0]),abs(dist[0][1]))
+            minIndx = 0
 
-        for j in range(len(dist)):
-            if minVal > max(abs(dist[j][0]),abs(dist[j][1])):
-                minVal = max(abs(dist[j][0]),abs(dist[j][1]))
-                minIndx = j
-        for k in range(2):
-            if dist[minIndx][k]!=0:
-                dist[minIndx][k] =dist[minIndx][k]//abs(dist[minIndx][k])
-        xpre,ypre = dist[minIndx][0]+x,dist[minIndx][1]+y
-        liste_preda.append([xpre,ypre])
+            for j in range(len(dist)):
+                if minVal > max(abs(dist[j][0]),abs(dist[j][1])):
+                    minVal = max(abs(dist[j][0]),abs(dist[j][1]))
+                    minIndx = j
+            for k in range(2):
+                if dist[minIndx][k]!=0:
+                    dist[minIndx][k] =dist[minIndx][k]//abs(dist[minIndx][k])
+            xpre,ypre = dist[minIndx][0]+x,dist[minIndx][1]+y
+            liste_preda.append([xpre,ypre])
     else:
         CalculPre(x,y,grid)
 
@@ -370,7 +378,7 @@ def Next():
 
 
 def Selection(x):
-    global Npro,Npre,Apro,Apre,Epre,case
+    global Npro,Npre,Apro,Apre,Epre,dist_Max
 
     if x == 1 :
         Npro = int(variable.get())
@@ -383,7 +391,7 @@ def Selection(x):
     elif x == 5:
         Epre = int(variable.get())
     elif x == 6:
-        case = int(variable.get())
+        dist_Max = int(variable.get())
 
 
 
@@ -392,20 +400,20 @@ def Reglages():
     fenetre = Toplevel()
     variable = Entry(fenetre, text ="Variable")
     variable.grid(column=0, row=0)
-    BtnNpro = Button(fenetre, text='Npro', command=lambda: Selection(1))
+    BtnNpro = Button(fenetre, text='Nombre proies', command=lambda: Selection(1))
     BtnNpro.grid(column =0,row=1)
-    BtnNpre = Button(fenetre, text='Npre', command=lambda: Selection(2))
+    BtnNpre = Button(fenetre, text='Nombre prédateurs', command=lambda: Selection(2))
     BtnNpre.grid(column =0,row=2)
-    BtnApro = Button(fenetre, text='Apro', command=lambda: Selection(3))
+    BtnApro = Button(fenetre, text='Vie des proies', command=lambda: Selection(3))
     BtnApro.grid(column =0,row=3)
-    BtnApro = Button(fenetre, text='Apre', command=lambda: Selection(4))
+    BtnApro = Button(fenetre, text='Vie des prédateurs', command=lambda: Selection(4))
     BtnApro.grid(column =0,row=4)
-    BtnEpro = Button(fenetre, text="Epro", command=lambda: Selection(5))
+    BtnEpro = Button(fenetre, text="Energie prédateurs", command=lambda: Selection(5))
     BtnEpro.grid(column =0,row=5)
     BtnEproLabel = Label(fenetre, text="(Au dessus de 9 pas de changement graphique)")
     BtnEproLabel.grid(column = 1, row=5)
-    BtnCase = Button(fenetre, text='Case', command= lambda: Selection(6))
-    BtnCase.grid(column=0,row=6)
+    BtnFlair = Button(fenetre, text='Distance Flair', command= lambda: Selection(6))
+    BtnFlair.grid(column=0,row=6)
 
 def Auto():
     global compteur
@@ -460,7 +468,15 @@ def affGrid():
             if len(grid[x][y]) == 2:
                 canvas.create_image(x*32,y*32,image=rabbit, anchor=NW)
                 coordR.append([x,y])
-                if grid[x][y][1] == 5:
+                if grid[x][y][1] > 8:
+                    canvas.create_image(x*32,y*32,image=Image9, anchor=NW)
+                elif grid[x][y][1] == 8:
+                    canvas.create_image(x*32,y*32,image=Image8, anchor=NW)
+                elif grid[x][y][1] == 7:
+                    canvas.create_image(x*32,y*32,image=Image7, anchor=NW)
+                elif grid[x][y][1] == 6:
+                    canvas.create_image(x*32,y*32,image=Image6, anchor=NW)
+                elif grid[x][y][1] == 5:
                     canvas.create_image(x*32,y*32,image=Image5, anchor=NW)
                 elif grid[x][y][1] == 4:
                     canvas.create_image(x*32,y*32,image=Image4, anchor=NW)
