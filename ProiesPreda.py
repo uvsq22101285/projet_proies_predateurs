@@ -3,6 +3,7 @@ from tkinter import *
 import random as rd
 import copy
 from tkinter import messagebox as box 
+import ast
 
 
 #Variables
@@ -103,25 +104,24 @@ def Start(widget):
     widget.grid_forget()
     BtnNext.grid(column=1, row=1)
     affGrid()
-    saving()
-    loading()
 
+
+    
 ###################
-def saving(grid, filename):
-    toSave=pil.Image.new("RGBA",(len(grid),len(grid[0])))
+
+def saving():
+    fic = open('ficSauvegarde','w')
     for i in range(len(grid)):
-        for j in range(len(grid[0])):
-            toSave.putpixel((i,j),grid[j][i])
-    toSave.save(filename)
+           fic.write(str(grid[i])+'\n')
+    fic.close() 
 
-
-def loading(filename):
-    toLoad=pil.Image.open(filename)
-    mat=[[(255,255,255,255)]*toLoad.size[0] for k in range(toLoad.size[1])]
-    for i in range(toLoad.size[1]):
-        for j in range(toLoad.size[0]):
-            mat[i][j]=toLoad.getpixel((j,i))
-    return mat
+def loading():
+    global grid
+    grid =[]
+    fic = open('ficSauvegarde','r')
+    for line in fic:
+        grid.append(ast.literal_eval(line))
+    
 ####ajout bordure plateau###
 def bordureFill(g,l,b):
     for i in range(l):
