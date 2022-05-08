@@ -3,6 +3,7 @@ from tkinter import *
 import random as rd
 import copy
 from tkinter import messagebox as box 
+import ast
 
 
 #Variables
@@ -105,8 +106,22 @@ def Start(widget):
     affGrid()
 
 
+    
 ###################
 
+def saving():
+    fic = open('ficSauvegarde','w')
+    for i in range(len(grid)):
+           fic.write(str(grid[i])+'\n')
+    fic.close() 
+
+def loading():
+    global grid
+    grid =[]
+    fic = open('ficSauvegarde','r')
+    for line in fic:
+        grid.append(ast.literal_eval(line))
+    
 ####ajout bordure plateau###
 def bordureFill(g,l,b):
     for i in range(l):
