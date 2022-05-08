@@ -8,7 +8,7 @@ from tkinter import messagebox as box
 #Variables
 
 #Paramètres Partie
-case = 32
+case = 30
 taille_image = 32
 Taille_canvas = (case * taille_image)-2
 vitesse = 60
@@ -17,7 +17,7 @@ vitesse = 60
 ###########
 #Proies
 #nombres de proies initiales
-Npro = 5
+Npro = 25
 #Durée de vie en tour
 Apro = 5
 
@@ -32,7 +32,7 @@ liste_probis = []
 
 ###########
 #Predateur
-Npre = 5
+Npre = 12
 Apre = 7
 Epre = 5
 xpre = 0
@@ -101,7 +101,7 @@ def Start(widget):
 
     gridtemp = grid.copy()
     widget.grid_forget()
-    BtnNext.grid(column=0, row=1)
+    BtnNext.grid(column=1, row=1)
     affGrid()
 
 
@@ -494,13 +494,13 @@ def affGrid():
 root = Tk()
 root.title('Chasse')
 canvas = Canvas(root, width = Taille_canvas, height = Taille_canvas,bg='white')
-canvas.grid(columnspan=1)
+canvas.grid(column =0,rowspan=7)
 BtnStart = Button(root,text='Simulation Manuelle', command=lambda: Start(BtnStart))
 BtnStart.grid(column=1, row=1)
 BtnRestart = Button(root, text='Relance Manuelle', command=lambda: Restart(BtnStart))
 BtnRestart.grid(row=3, column=1)
 BtnNext = Button(root, text='Tour Suivant', command=Next)
-BtnRetour = Button(root, text='Retour (seulement manuelle)', command=Retour).grid(column=0,row=2)
+BtnRetour = Button(root, text='Retour Manuelle', command=Retour).grid(column=1,row=2)
 BtnAuto = Button(root, text= 'Simulation',command=Auto).grid(column=2,row=1)
 BtnReglages = Button(root, text= 'Réglages',command=Reglages).grid(column=1,row=0)
 BtnPause = Button(root,text= 'Pause',command=lambda: Pause(BtnPause))
