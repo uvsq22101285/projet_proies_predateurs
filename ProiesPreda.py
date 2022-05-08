@@ -15,7 +15,7 @@ taille_case= 600/case
 ###########
 #Proies
 #nombres de proies initiales
-Npro = 15
+Npro = 3
 #fréquences d'apparition des lapins à chaque tour
 Fpro =1
 #Durée de vie en tour
@@ -32,7 +32,7 @@ liste_probis = []
 
 ###########
 #Predateur
-Npre = 8
+Npre = 1
 Apre = 8
 Epre = 9
 xpre = 0
@@ -47,6 +47,7 @@ gridtemp = []
 compteur = 0
 newGrid = []
 
+distMax = 5
 #liste des prédateurs
 liste_preda = []
 
@@ -135,10 +136,7 @@ def NaissanceV2():
                     #condition repro renard
                     if grid[xpro][ypro][1] != Apre and grid[xpro][ypro][2] > 5:
                         Random()
-                        SpawnPre(xpro,ypro,grid)
-                
-
-
+                        SpawnPre(xpro,ypro,grid) 
     affGrid()               
                     
 
@@ -226,25 +224,27 @@ def Flair(x,y): #Fonction déplacement renard
     dist = []
     if liste_pro != [] or liste_probis != []:
         for i in range(len(liste_pro)):
-            dist.append([liste_pro[i][0]-x,liste_pro[i][1]-y])
+            if max(abs(liste_pro[i][0]-x),abs(liste_pro[i][1]-y)) <distMax:
+                dist.append([liste_pro[i][0]-x,liste_pro[i][1]-y])
         for u in range(len(liste_probis)):
-            dist.append([liste_probis[u][0]-x,liste_probis[u][1]-y])
-
-        minVal = max(abs(dist[0][0]),abs(dist[0][1]))
-        minIndx = 0
-
-        for j in range(len(dist)):
-            if minVal > max(abs(dist[j][0]),abs(dist[j][1])):
-                minVal = max(abs(dist[j][0]),abs(dist[j][1]))
-                minIndx = j
-        for k in range(2):
-            if dist[minIndx][k]!=0:
-                dist[minIndx][k] =dist[minIndx][k]//abs(dist[minIndx][k])
-        xpre,ypre = dist[minIndx][0]+x,dist[minIndx][1]+y
-        liste_preda.append([xpre,ypre])
-    else:
-        xpre,ypre = x,y
-
+            if max(abs(liste_probis[u][0]-x),abs(liste_probis[u][1]-y)) <distMax:
+                dist.append([liste_probis[u][0]-x,liste_probis[u][1]-y])
+        print(dist)
+        if dist!=[]:       
+            minVal = max(abs(dist[0][0]),abs(dist[0][1]))
+            minIndx = 0
+            for j in range(len(dist)):
+                if minVal > max(abs(dist[j][0]),abs(dist[j][1])):
+                    minVal = max(abs(dist[j][0]),abs(dist[j][1]))
+                    minIndx = j
+            for k in range(2):
+                if dist[minIndx][k]!=0:
+                    dist[minIndx][k] =dist[minIndx][k]//abs(dist[minIndx][k])
+            xpre,ypre = dist[minIndx][0]+x,dist[minIndx][1]+y
+            liste_preda.append([xpre,ypre])
+        else:
+            xpre,ypre = x,y
+            #move random pour renard ici
 
 def newgrid():
     global newGrid
