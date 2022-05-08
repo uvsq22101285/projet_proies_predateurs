@@ -4,12 +4,14 @@ import random as rd
 import copy
 from tkinter import messagebox as box 
 
+
 #Variables
 
-
-#Nombre de case fois lui même 
+#Paramètres Partie
 case = 12
-taille_case= 600/case
+taille_image = 32
+Taille_canvas = case * taille_image
+
 
 
 ###########
@@ -42,9 +44,8 @@ ypre = 0
 coordR = []
 coordF = []
 
-##test
+##Variables Temporaires pour les fonctions
 gridtemp = []
-compteur = 0
 newGrid = []
 
 distMax = 5
@@ -81,7 +82,7 @@ def SpawnPre(x,y,grid):
 
 #commencement de la partie
 def Start(widget):
-    global coordF,compteur,gridtemp
+    global coordF,gridtemp
     affGrid()
     for _ in range(Npro):
         Random()
@@ -101,7 +102,6 @@ def Start(widget):
     gridtemp = grid.copy()
     widget.grid_forget()
     BtnNext.grid(column=0, row=1)
-    compteur=1
     affGrid()
 
 
@@ -409,7 +409,7 @@ def affGrid():
 
 root = Tk()
 root.title('Chasse')
-canvas = Canvas(root, width = 760, height = 760,bg='green')
+canvas = Canvas(root, width = Taille_canvas, height = Taille_canvas,bg='green')
 canvas.grid(columnspan=1)
 BtnStart = Button(root,text='Start', command=lambda: Start(BtnStart))
 BtnStart.grid(column=0, row=1)
