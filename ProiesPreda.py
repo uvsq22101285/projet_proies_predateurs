@@ -132,7 +132,6 @@ def NaissanceV2():
                     if grid[xpro][ypro][1] != Apro:
                         if [xpro,ypro] not in accoupler_pro:
                             accoupler_pro.append([x,y])
-                            accoupler_pro.append([xpro,ypro])
                             SpawnProNaissance(x,y,xpro,ypro)
             elif len(grid[x][y]) == 3:
                 Detect(x,y,grid)
@@ -140,6 +139,7 @@ def NaissanceV2():
                     #condition repro renard
                     if grid[xpro][ypro][1] != Apre and grid[xpro][ypro][2] > 5:
                         if [xpro,ypro] not in accoupler_pre:
+                            accoupler_pre.append([x,y])
                             Random()
                             SpawnPre(xpro,ypro,grid)
                 
