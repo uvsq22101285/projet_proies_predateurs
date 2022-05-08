@@ -246,6 +246,19 @@ def CalculPro(x,y, grid):
         liste_final.append(liste_temp[rd.randint(0,len(liste_temp)-1)])
         xpro,ypro = liste_final[0][0],liste_final[0][1]
     
+def CalculPre(x,y,grid):
+    global xpre,ypre
+    liste_combinaisonxy = [[x+1,y],[x+1,y-1],[x,y-1],[x-1,y-1],[x-1,y],[x-1,y+1],[x,y+1],[x+1,y+1]]
+    liste_temp = []
+    liste_final = []
+    xpre,ypre = x,y
+    for i in range(0,len(liste_combinaisonxy)):
+        if grid[liste_combinaisonxy[i][0]][liste_combinaisonxy[i][1]] == []:
+            liste_temp.append([liste_combinaisonxy[i][0],liste_combinaisonxy[i][1]])
+    if liste_temp != []:
+        liste_final.append(liste_temp[rd.randint(0,len(liste_temp)-1)])
+        xpre,ypre = liste_final[0][0],liste_final[0][1]
+
 
 #####
 #Fonction déplacement renard
@@ -271,7 +284,7 @@ def Flair(x,y): #Fonction déplacement renard
         xpre,ypre = dist[minIndx][0]+x,dist[minIndx][1]+y
         liste_preda.append([xpre,ypre])
     else:
-        xpre,ypre = x,y
+        CalculPre(x,y,grid)
 
 
 def newgrid():
