@@ -76,7 +76,7 @@ Ce logo représente une Proie, il peut seulement se déplacer et se reproduire, 
 
 <img src="https://github.com/uvsq22101285/projet_proies_predateurs/blob/main/carr%C3%A9_sol.png" alt="Le sol"/>
 
-Ce logo représente le plateau sur lequel les spécimens se déplace et survive !
+Ce logo représente le plateau sur lequel les spécimens se déplacent et survivent !
 
 <img src="https://github.com/uvsq22101285/projet_proies_predateurs/blob/main/Mur2.png" alt="Le sol"/>
 
@@ -84,12 +84,12 @@ Ce logo représente les bordures du plateau, elles ne peuvent être franchies !
 
 <img src="https://github.com/uvsq22101285/projet_proies_predateurs/blob/main/Energie0.png" alt="Le sol"/>
 
-Ce logo représente l'énergie qui est une caractéristique spécifique aux prédateurs, elle n'excédera pas la valeur de 9 unités d'énergie graphique par manque de place graphique
+Ce logo représente l'énergie qui est une caractéristique spécifique aux prédateurs, elle n'excédera pas la valeur de 9 unités d'énergie graphiquement par manque de place.
 mais la valeur d'énergie supplémentaire sera toutefois bien présente. Ce logo se situe en haut à droite des prédateurs.
 
 <img src="https://github.com/uvsq22101285/projet_proies_predateurs/blob/main/0.png" alt="Le sol"/>
 
-Ce logo représente le nombre de vies en tour qui reste à la proie ou au prédateur concerné. Ce logo se situe en haut à gauche des proies ou des prédateurs. Comme pour l'énergie, cette valeur n'excédera pas 9 unités de vies par manque de place graphique. La valeur au dessus sera toutefois bien présente.
+Ce logo représente le nombre de vies en tour qui reste à la proie ou au prédateur concerné. Ce logo se situe en haut à gauche des proies ou des prédateurs. Comme pour l'énergie, cette valeur n'excédera pas 9 unités de vies par manque de place. La valeur au dessus sera toutefois bien présente.
 
 
 
