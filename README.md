@@ -28,6 +28,8 @@ PARTIE MANUELLE:
       Il vous permettra de gérer à votre manière le passage de chaque tour.
     * Relance Manuelle, vous permettra si votre partie ne va pas dans le sens que vous souhaitez de relancer
       une nouvelle partie !
+    * Retour Manuelle, vous permettra de revenir en arrière. Le retour en arrière est possible jusqu'au premier lancer.
+      Une fois cette limite dépassé un message d'erreur apparaîtra.
 
 PARTIE AUTOMATIQUE:
 
