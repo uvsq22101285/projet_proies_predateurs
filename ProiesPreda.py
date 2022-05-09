@@ -103,7 +103,7 @@ def SpawnPre(x,y,grid):
 def Start(widget):
     """
     Fonction de départ qui permet de lancer le début de la simulation
-    widget:
+    widget: button.tk
     """
     global coordF,gridtemp
     affGrid()
@@ -125,8 +125,7 @@ def Start(widget):
     gridtemp = grid.copy()
     widget.grid_forget()
     BtnNext.grid(column=1, row=1)
-    print(type(widget))
-    
+
     affGrid()
 
 
@@ -135,7 +134,7 @@ def Start(widget):
 
 def saving():
     """
-    Fonction qui sert à sauvegarder la matrice
+    Fonction qui sert à sauvegarder la matrice dans un fichier ficSauvegarde
     """
     fic = open('ficSauvegarde','w')
     for i in range(len(grid)):
@@ -143,6 +142,9 @@ def saving():
     fic.close() 
 
 def loading():
+    """
+    Fonction qui sert à charger partie à partir d'un fichier ficSauvegarde
+    """
     global grid
     grid =[]
     fic = open('ficSauvegarde','r')
@@ -152,6 +154,9 @@ def loading():
 
 ####ajout bordure plateau###
 def bordureFill(g,l,b):
+    """
+    Fonction qui remplis les bords du plateau de bordures sous forme de '#'
+    """
     for i in range(l):
         for j in range(l):
             g[i][0] = b
@@ -162,6 +167,11 @@ def bordureFill(g,l,b):
 ############
 
 def NaissanceV2():
+    """
+    Fonction qui s'occupe de gérer l'accouplement des différents spécimens de la carte en respectant leurs conditions
+    La proie ne peut pas s'accoupler si elle vient de naître 
+    Le prédateur ne peut pas s'accoupler si il vient de naître et si il a une énergie inférieur à celle renseignée dans les réglages.
+    """
     global xpro, ypro, grid
     
     accoupler_pro = []
@@ -193,6 +203,9 @@ def NaissanceV2():
 
 ###marche pas
 def SpawnProNaissance(x,y,xpro,ypro):
+    """
+    Fonction qui choisit aléatoirement 1 paire de coordonnées entre deux parents proies, pour faire apparaître aléatoirement une nouvelle proie autour du parent cible. 
+    """
     global grid
     liste_x = [x, x+1,x-1]
     liste_xpro = [xpro,xpro+1,xpro-1]
@@ -222,6 +235,10 @@ def SpawnProNaissance(x,y,xpro,ypro):
 
 ####Marche
 def Detect(x,y,grid):
+    """
+    Fonction qui permet de détecter la présence de proies ou de prédateurs 
+    Cette fonction est notament utilisée pour l'accouplement
+    """
     global xpro, ypro, liste_pro
     liste_pro = []
     random = []
@@ -245,6 +262,10 @@ def Detect(x,y,grid):
 
 
 def Check(condition):
+    """
+    Permet de réduire à chaque tour les points de vie et l'énergie des spécimens concernés..
+    Si la cible n'a plus d'énergies ou de point de vies, celle-ci la supprime du plateau
+    """
     global liste_pro
     for x in range(case):
         for y in range(case):
@@ -261,6 +282,9 @@ def Check(condition):
 #####
 #Fonctions déplacement lapin
 def CalculPro(x,y, grid):
+    """
+    Permet de déterminer la paire de coordonnée où la proie va pouvoir se déplacer
+    """
     global xpro, ypro
     liste_combinaisonxy = [[x+1,y],[x+1,y-1],[x,y-1],[x-1,y-1],[x-1,y],[x-1,y+1],[x,y+1],[x+1,y+1]]
     liste_temp = []
@@ -274,6 +298,9 @@ def CalculPro(x,y, grid):
         xpro,ypro = liste_final[0][0],liste_final[0][1]
     
 def CalculPre(x,y,grid):
+    """
+    Permet de déterminer la paire de coordonnée où le prédateur va pouvoir se déplacer
+    """
     global xpre,ypre
     liste_combinaisonxy = [[x+1,y],[x+1,y-1],[x,y-1],[x-1,y-1],[x-1,y],[x-1,y+1],[x,y+1],[x+1,y+1]]
     liste_temp = []
@@ -290,6 +317,9 @@ def CalculPre(x,y,grid):
 #####
 #Fonction déplacement renard
 def Flair(x,y): #Fonction déplacement renard
+    """
+    Fonction qui simule une intelligence artificielle des prédateurs pour choisir le chemin le plus court pour les manger
+    """
     global liste_pro,liste_probis,xpre,ypre,liste_preda
     dist = []
     if liste_pro != [] or liste_probis != []:
@@ -318,12 +348,21 @@ def Flair(x,y): #Fonction déplacement renard
 
 
 def newgrid():
+    """
+    Fonction qui créer basiquement une nouvelle grille de jeu
+    type : list
+    """
     global newGrid
     newGrid = [[[] for x in range(case)]for y in range(case)]
     bordureFill(newGrid,case,'#')
 #####
 
 def Move():
+    """
+    Fonction qui va permettre d'organiser le déplacement de chacune des espèces sur le terrain
+    Elle prendra en compte les paires de coordonnées obtenu à travers la fonction Flair (pour les prédateurs) 
+    et la fonction CalculPro (pour les proies)
+    """
     global xpro, ypro,xpre,ypre, grid, gridtemp,liste_pro,liste_probis
     gridtemp = copy.deepcopy(grid)
     temp = []
@@ -367,6 +406,11 @@ def Move():
                     
 
 def Restart(widget):
+    """
+    Fonction pour les boutons de l'interface Tkinter
+    Elle permet de relancer la simulation
+    Elle réintialise les précédentes variables.
+    """
     global grid, save, compteur
     compteur = 0
     grid = [[[] for x in range(case)]for y in range(case)]
@@ -376,6 +420,11 @@ def Restart(widget):
     save = []
 
 def Retour():
+    """
+    Fonction pour les boutons de l'interface Tkinter
+    Elle permet de revenir en arrière jusqu'au lancement de la partie
+    Si le retour en arrière est impossible un message d'erreur apparaîtra
+    """
     global grid, gridtemp,save
     if save != []:
         grid = save[-1]
@@ -385,6 +434,11 @@ def Retour():
     affGrid()
 
 def Next():
+    """
+    Fonction pour les boutons de l'interface Tkinter
+    Elle permet le passage de chaque tour
+    Elle permet l'appelle de toutes les fonctions qui assurent le bon déroulement de la partie 
+    """
     global coordF, coordR,liste_pro,liste_probis,liste_preda,save,savetemp
     coordF,coordR=[],[]
     save.append(grid)
@@ -400,6 +454,10 @@ def Next():
 
 
 def Selection(x):
+    """
+    Fonction pour les boutons de l'interface Tkinter
+    Elle permet l'organisation des boutons de réglages et le changement précis des variables qui permettent le bon déroulement de la partie
+    """
     global Npro,Npre,Apro,Apre,Epre,dist_Max
 
     if x == 1 :
@@ -418,6 +476,11 @@ def Selection(x):
 
 
 def Reglages():
+    """
+    Fonction pour les boutons de l'interface Tkinter
+    Menu qui regroupe les différents réglages qui permettent le bon déroulement de la partie
+    Veuillez lire le readme pour connaître l'utilité de chaque variable
+    """
     global variable
     fenetre = Toplevel()
     variable = Entry(fenetre, text ="Variable")
@@ -438,6 +501,11 @@ def Reglages():
     BtnFlair.grid(column=0,row=6)
 
 def Auto():
+    """
+    Fonction pour les boutons de l'interface Tkinter
+    Elle permet le fonctionnement automatique de la simulation
+    La vitesse de la simulation est réglable dans les paramètres de la partie
+    """
     global compteur
     if compteur == 0:
         Start(BtnStart)
@@ -447,12 +515,24 @@ def Auto():
         root.after(vitesse, Auto)
 
 def Pause(widget):
+    """
+    Fonction pour les boutons de l'interface Tkinter
+    Elle permet d'interrompre sans supprimer la progression de la simulation
+    Disparaît lors de son utilisation
+    Réapparaît après l'utilisation du bouton Reprendre
+    """
     global condition
     condition = True
     widget.grid_forget()
     BtnReprendre.grid(column=2, row=2)
 
 def Reprendre(widget):
+    """
+    Fonction pour les boutons de l'interface Tkinter
+    Elle permet de reprendre la progression de la simulation
+    Disparaît lors de son utilisation
+    Réapparaît après l'utilisation du bouton Pause
+    """
     global condition 
     condition = False
     Auto()
@@ -460,12 +540,21 @@ def Reprendre(widget):
     BtnPause.grid(column=2, row=2)
 
 def RestartAuto():
+    """
+    Fonction pour les boutons de l'interface Tkinter
+    Elle permet de relancer,une fois utiliser, la simulation depuis le début
+    Elle appelle la fonction Auto()
+    """
     global compteur,condition, grid
     compteur,condition = 0, False
     grid = [[[] for x in range(case)]for y in range(case)]
     Auto()
 
 def Win():
+    """
+    Fonction qui conditionne la victoire
+    Affiche une messagebox contenant le nom de l'espèce victorieuse
+    """
     global condition
     preda = []
     pro = []
@@ -483,6 +572,10 @@ def Win():
         condition = True
 
 def affGrid():
+    """"
+    Fonction qui permet l'affichage et l'actualisation du plateau de jeu
+    Permet de charger chaque image en fonction du type de la case, des caractéristiques ou de du spécimen qui y habite
+    """
     bordureFill(grid,case,'#')
     for x in range(case):
         for y in range(case):
