@@ -68,23 +68,43 @@ grid = [[[] for x in range(case)]for y in range(case)]
 
 #Donne des coordonnées random pour le spawn des premiers lapin
 def Random():
+    """
+    Fonction qui choisit aléatoirement des coordonnées x et y
+    type : int
+    """
     global xpro,ypro
     xpro = rd.randint(0, case-1)
     ypro = rd.randint(0, case-1)
 
 #Spawn des premiers lapins
 def SpawnPro(x,y,grid):
+    """
+    Fonction qui fait apparaître les proies en fonction des paramêtres données
+    x : coordonnées int
+    y : coordonnées int
+    grid : liste actuelle list
+    """
     if grid[x][y] == []:
         grid[x][y] = ['R',Apro]
 
 #Spawn des prédateurs
 def SpawnPre(x,y,grid):
+    """
+    Fonction qui fait apparaître les prédateurs en fonction des paramêtres données
+    x : coordonnées int
+    y : coordonnées int
+    grid : liste actuelle list
+    """
     if grid[x][y] == []:
         grid[x][y] =['F',Apre,Epre]
 
 
 #commencement de la partie
 def Start(widget):
+    """
+    Fonction de départ qui permet de lancer le début de la simulation
+    widget:
+    """
     global coordF,gridtemp
     affGrid()
     for _ in range(Npro):
@@ -105,6 +125,7 @@ def Start(widget):
     gridtemp = grid.copy()
     widget.grid_forget()
     BtnNext.grid(column=1, row=1)
+    print(type(widget))
     
     affGrid()
 
@@ -356,7 +377,6 @@ def Restart(widget):
 
 def Retour():
     global grid, gridtemp,save
-    #print(save[-1])
     if save != []:
         grid = save[-1]
         del save[-1]
