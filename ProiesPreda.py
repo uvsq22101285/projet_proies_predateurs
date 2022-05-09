@@ -606,6 +606,7 @@ def affGrid():
             if len(grid[x][y]) == 3:
                 canvas.create_image(x*32,y*32,image=fox, anchor=NW)
                 coordF.append([x,y])
+                
                 #Partie Vie
                 if grid[x][y][1] > 8:
                     canvas.create_image(x*32,y*32,image=Image9, anchor=NW)
@@ -625,6 +626,7 @@ def affGrid():
                     canvas.create_image(x*32,y*32,image=Image2, anchor=NW)
                 elif grid[x][y][1] == 1:
                     canvas.create_image(x*32,y*32,image=Image1, anchor=NW)
+
                 #Partie Energie
                 if grid[x][y][2] > 8:
                     canvas.create_image(x*32,y*32,image=Energie9, anchor=NW)
