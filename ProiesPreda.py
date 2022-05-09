@@ -127,6 +127,7 @@ def loading():
     fic = open('ficSauvegarde','r')
     for line in fic:
         grid.append(ast.literal_eval(line))
+    affGrid()
 
 ####ajout bordure plateau###
 def bordureFill(g,l,b):
@@ -278,7 +279,7 @@ def Flair(x,y): #Fonction déplacement renard
             if max(abs(liste_probis[u][0]-x),abs(liste_probis[u][1]-y)) <= dist_Max:
                 dist.append([liste_probis[u][0]-x,liste_probis[u][1]-y])
 
-        if dist > 1 :  
+        if len(dist) > 1 :  
             minVal = max(abs(dist[0][0]),abs(dist[0][1]))
             minIndx = 0
 
@@ -553,6 +554,8 @@ BtnPause.grid(column=2,row=2)
 BtnReprendre = Button(root,text= 'Reprendre',command=lambda: Reprendre(BtnReprendre))
 BtnRestartAuto = Button(root,text= 'Relancer la simulation',command=RestartAuto)
 BtnRestartAuto.grid(column=2,row=3)
+BtnSauvegarde = Button(root, text='Sauvegarde',command=saving).grid(column=1, row=4)
+BtnLoad = Button(root, text='Charger',command=loading).grid(column=2,row=4)
 
 
 #Images Projet
